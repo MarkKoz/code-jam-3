@@ -5,9 +5,16 @@ from pytmx.util_pygame import load_pygame
 from player import Player
 
 DEFAULT_SIZE = (1280, 720)
-PLAYER_SPEED = 100
+PLAYER_SPEED = 200
 FPS = 60
 MAP_PATH = 'assets/map.tmx'
+
+# Key Contants
+UP_KEYS = (pygame.K_UP, pygame.K_w)
+DOWN_KEYS = (pygame.K_DOWN, pygame.K_s)
+
+LEFT_KEYS = (pygame.K_LEFT, pygame.K_a)
+RIGHT_KEYS = (pygame.K_RIGHT, pygame.K_d)
 
 
 class Game:
@@ -49,18 +56,33 @@ class Game:
                 self.handle_input(event, True)
 
     def handle_input(self, event, up=False):
-        # Set velocity to 0 if key is released.
-        speed = 0 if up else PLAYER_SPEED
+        speed = PLAYER_SPEED
 
-        # TODO: Options/constants for controls
-        if event.key in (pygame.K_UP, pygame.K_w):
+        key = event.key
+        current_keys = pygame.key.get_pressed()
+
+        # vertical keys
+        if key in UP_KEYS:
+            if up:
+                down_pressed = any(current_keys[k] for k in DOWN_KEYS)
+                speed = 0 if not down_pressed else -PLAYER_SPEED
             self.player.velocity[1] = -speed
-        elif event.key in (pygame.K_DOWN, pygame.K_s):
+        elif key in DOWN_KEYS:
+            if up:
+                up_pressed = any(current_keys[k] for k in UP_KEYS)
+                speed = 0 if not up_pressed else -PLAYER_SPEED
             self.player.velocity[1] = speed
 
-        if event.key in (pygame.K_LEFT, pygame.K_a):
+        # horizontal keys
+        elif key in LEFT_KEYS:
+            if up:
+                right_pressed = any(current_keys[k] for k in RIGHT_KEYS)
+                speed = 0 if not right_pressed else -PLAYER_SPEED
             self.player.velocity[0] = -speed
-        elif event.key in (pygame.K_RIGHT, pygame.K_d):
+        elif key in RIGHT_KEYS:
+            if up:
+                left_pressed = any(current_keys[k] for k in LEFT_KEYS)
+                speed = 0 if not left_pressed else -PLAYER_SPEED
             self.player.velocity[0] = speed
 
     def update(self, time_delta):
