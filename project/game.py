@@ -3,6 +3,7 @@ import pyscroll
 from pytmx.util_pygame import load_pygame
 
 DEFAULT_SIZE = (1280, 720)
+FPS = 60
 MAP_PATH = 'assets/map.tmx'
 
 
@@ -34,9 +35,13 @@ class Game:
     def run(self):
         """Starts the game's main loop."""
         self.running = True
+        clock = pygame.time.Clock()
 
         try:
             while self.running:
+                # Gets number of seconds since last call
+                time_delta = clock.tick(FPS) / 1000
+
                 self.handle_events()
                 self.draw(self.surface)
 
