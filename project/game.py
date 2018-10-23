@@ -26,7 +26,7 @@ class Game:
         bottom = self.map_layer.data.map_size[1] * self.map_layer.data.tile_size[1]
         self.player.position = [64, bottom - 192]
 
-        self.group.add(self.player)
+        self.group.add(self.player, layer=3)
 
     def draw(self, surface):
         self.group.center(self.player.rect.center)
