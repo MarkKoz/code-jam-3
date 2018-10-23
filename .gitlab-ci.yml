@@ -12,7 +12,7 @@
 #
 # python:latest is 3.7 at time of commit.
 
-image: python:latest
+image: python:3.6.5-stretch
 
 before_script:
   # Print out Python information for debugging and install pipenv
