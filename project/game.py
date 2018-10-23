@@ -1,10 +1,8 @@
-from pprint import pprint
-
 import pygame
 import pyscroll
 from pytmx.util_pygame import load_pygame
 
-from player import Player
+from project.player import Player
 
 DEFAULT_SIZE = (1280, 720)
 FPS = 60
@@ -31,10 +29,6 @@ class Game:
 
         self.group.add(self.player, layer=3)
 
-        # data: pyscroll.TiledMapData = self.map_layer.data
-        # print(self.map_layer.data)
-        # print(self.map_layer.map_rect)
-
     def draw(self, surface):
         camera_pos = list(self.player.rect.center)
         camera_pos[0] = max(camera_pos[0], self.player.max_x)
@@ -59,14 +53,6 @@ class Game:
 
     def handle_input(self, event, up=False):
         pass
-
-        # DEBUG KEY
-        if event.key == pygame.K_l and not up:
-            print(self.player.rect)
-            for wall_rect in self.walls:
-                if self.player.feet.colliderect(wall_rect):
-                    print("COLLISION", wall_rect)
-                    break
 
     def update(self, time_delta):
         self.group.update(time_delta)
@@ -111,7 +97,6 @@ class Game:
 
         # Create new data source for pyscroll
         map_data = pyscroll.data.TiledMapData(tmx_data)
-
         w, h = self.screen.get_size()
 
         # Create new renderer (camera)
