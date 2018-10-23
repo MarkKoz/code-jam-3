@@ -7,7 +7,6 @@ from pytmx.util_pygame import load_pygame
 from player import Player
 
 DEFAULT_SIZE = (1280, 720)
-PLAYER_SPEED = 100
 FPS = 60
 MAP_PATH = 'assets/map.tmx'
 TILE_SIZE = 32
@@ -37,7 +36,10 @@ class Game:
         # print(self.map_layer.map_rect)
 
     def draw(self, surface):
-        self.group.center(self.player.rect.center)
+        camera_pos = list(self.player.rect.center)
+        camera_pos[0] = max(camera_pos[0], self.player.max_x)
+
+        self.group.center(camera_pos)
         self.group.draw(surface)
 
     def handle_events(self):
@@ -49,24 +51,14 @@ class Game:
                 self.set_screen(event.w, event.h)
                 self.map_layer.set_size((event.w / 2, event.h / 2))
             elif event.type == pygame.KEYDOWN:
+                self.player.handle_input(event)
                 self.handle_input(event)
             elif event.type == pygame.KEYUP:
+                self.player.handle_input(event, True)
                 self.handle_input(event, True)
 
     def handle_input(self, event, up=False):
-        # Set velocity to 0 if key is released.
-        speed = 0 if up else PLAYER_SPEED
-
-        # TODO: Options/constants for controls
-        if event.key in (pygame.K_UP, pygame.K_w):
-            self.player.velocity[1] = -speed
-        elif event.key in (pygame.K_DOWN, pygame.K_s):
-            self.player.velocity[1] = speed
-
-        if event.key in (pygame.K_LEFT, pygame.K_a):
-            self.player.velocity[0] = -speed
-        elif event.key in (pygame.K_RIGHT, pygame.K_d):
-            self.player.velocity[0] = speed
+        pass
 
         # DEBUG KEY
         if event.key == pygame.K_l and not up:
