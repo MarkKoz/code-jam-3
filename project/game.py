@@ -2,7 +2,10 @@ import pygame
 import pyscroll
 from pytmx.util_pygame import load_pygame
 
+from player import Player
+
 DEFAULT_SIZE = (1280, 720)
+PLAYER_SPEED = 100
 FPS = 60
 MAP_PATH = 'assets/map.tmx'
 
@@ -17,10 +20,10 @@ class Game:
         self.map_layer = self.init_map()
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer)
 
+        self.player = Player()
+
     def draw(self, surface):
-        # y = 0 is top, but map starts at bottom.
-        bottom = self.map_layer.data.map_size[1] * self.map_layer.data.tile_size[1]
-        self.group.center((0, bottom))
+        self.group.center(self.player.rect.center)
         self.group.draw(surface)
 
     def handle_events(self):
@@ -33,18 +36,23 @@ class Game:
                 self.map_layer.set_size((event.w / 2, event.h / 2))
             elif event.type == pygame.KEYDOWN:
                 self.handle_input(event)
+            elif event.type == pygame.KEYUP:
+                self.handle_input(event, True)
 
-    def handle_input(self, event):
+    def handle_input(self, event, up=False):
+        # Set velocity to 0 if key is released.
+        speed = 0 if up else PLAYER_SPEED
+
         # TODO: Options/constants for controls
         if event.key in (pygame.K_UP, pygame.K_w):
-            pass
+            self.player.velocity[1] = -speed
         elif event.key in (pygame.K_DOWN, pygame.K_s):
-            pass
+            self.player.velocity[1] = speed
 
         if event.key in (pygame.K_LEFT, pygame.K_a):
-            pass
+            self.player.velocity[0] = -speed
         elif event.key in (pygame.K_RIGHT, pygame.K_d):
-            pass
+            self.player.velocity[0] = speed
 
     def run(self):
         """Starts the game's main loop."""
