@@ -29,7 +29,10 @@ class Game:
         self.group.add(self.player, layer=3)
 
     def draw(self, surface):
-        self.group.center(self.player.rect.center)
+        camera_pos = list(self.player.rect.center)
+        camera_pos[0] = max(camera_pos[0], self.player.max_x)
+
+        self.group.center(camera_pos)
         self.group.draw(surface)
 
     def handle_events(self):
