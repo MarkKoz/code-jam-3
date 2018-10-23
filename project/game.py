@@ -22,6 +22,12 @@ class Game:
 
         self.player = Player()
 
+        # y = 0 is top but the map starts at the bottom.
+        bottom = self.map_layer.data.map_size[1] * self.map_layer.data.tile_size[1]
+        self.player.position = [64, bottom - 192]
+
+        self.group.add(self.player)
+
     def draw(self, surface):
         self.group.center(self.player.rect.center)
         self.group.draw(surface)
@@ -54,6 +60,9 @@ class Game:
         elif event.key in (pygame.K_RIGHT, pygame.K_d):
             self.player.velocity[0] = speed
 
+    def update(self, time_delta):
+        self.player.update(time_delta)
+
     def run(self):
         """Starts the game's main loop."""
         self.running = True
@@ -65,6 +74,7 @@ class Game:
                 time_delta = clock.tick(FPS) / 1000
 
                 self.handle_events()
+                self.update(time_delta)
                 self.draw(self.surface)
 
                 # Resizes the surface and sets it as the new screen.
