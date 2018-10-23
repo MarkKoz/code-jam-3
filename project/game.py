@@ -31,6 +31,20 @@ class Game:
             elif event.type == pygame.VIDEORESIZE:
                 self.set_screen(event.w, event.h)
                 self.map_layer.set_size((event.w / 2, event.h / 2))
+            elif event.type == pygame.KEYDOWN:
+                self.handle_input(event)
+
+    def handle_input(self, event):
+        # TODO: Options/constants for controls
+        if event.key in (pygame.K_UP, pygame.K_w):
+            pass
+        elif event.key in (pygame.K_DOWN, pygame.K_s):
+            pass
+
+        if event.key in (pygame.K_LEFT, pygame.K_a):
+            pass
+        elif event.key in (pygame.K_RIGHT, pygame.K_d):
+            pass
 
     def run(self):
         """Starts the game's main loop."""
