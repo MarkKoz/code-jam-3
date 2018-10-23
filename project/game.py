@@ -61,7 +61,7 @@ class Game:
             self.player.velocity[0] = speed
 
     def update(self, time_delta):
-        self.player.update(time_delta)
+        self.group.update(time_delta)
 
     def run(self):
         """Starts the game's main loop."""
