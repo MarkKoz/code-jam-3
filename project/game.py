@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import pygame
 import pyscroll
 from pytmx.util_pygame import load_pygame
@@ -8,6 +10,7 @@ DEFAULT_SIZE = (1280, 720)
 PLAYER_SPEED = 100
 FPS = 60
 MAP_PATH = 'assets/map.tmx'
+TILE_SIZE = 32
 
 
 class Game:
@@ -15,6 +18,7 @@ class Game:
         self.running = False
         self.screen = None
         self.surface = None
+        self.walls = []
 
         self.set_screen(*DEFAULT_SIZE)
         self.map_layer = self.init_map()
@@ -27,6 +31,10 @@ class Game:
         self.player.position = [64, bottom - 192]
 
         self.group.add(self.player, layer=3)
+
+        # data: pyscroll.TiledMapData = self.map_layer.data
+        # print(self.map_layer.data)
+        # print(self.map_layer.map_rect)
 
     def draw(self, surface):
         self.group.center(self.player.rect.center)
@@ -59,6 +67,14 @@ class Game:
             self.player.velocity[0] = -speed
         elif event.key in (pygame.K_RIGHT, pygame.K_d):
             self.player.velocity[0] = speed
+
+        # DEBUG KEY
+        if event.key == pygame.K_l and not up:
+            print(self.player.rect)
+            for wall_rect in self.walls:
+                if self.player.feet.colliderect(wall_rect):
+                    print("COLLISION", wall_rect)
+                    break
 
     def update(self, time_delta):
         self.group.update(time_delta)
@@ -94,6 +110,12 @@ class Game:
     def init_map(self):
         """Loads map data and creates a renderer."""
         tmx_data = load_pygame(MAP_PATH)  # Load data from pytmx
+
+        # TODO: Maybe use an enum if we get a lot of properties and layers
+        for x, y, gid in tmx_data.get_layer_by_name("Land"):
+            properties = tmx_data.get_tile_properties_by_gid(gid)
+            if properties and properties.get("COLLISION"):
+                self.walls.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
 
         # Create new data source for pyscroll
         map_data = pyscroll.data.TiledMapData(tmx_data)
