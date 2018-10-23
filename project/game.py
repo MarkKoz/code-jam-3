@@ -57,6 +57,9 @@ class Game:
     def update(self, time_delta):
         self.group.update(time_delta)
 
+        if self.player.collides(self.walls):
+            self.player.move_back()
+
     def run(self):
         """Starts the game's main loop."""
         self.running = True

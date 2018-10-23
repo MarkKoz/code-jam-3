@@ -21,15 +21,24 @@ class Player(pygame.sprite.Sprite):
 
         self.velocity = [0, 0]
         self.position = [0, 0]
+        self._old_position = self.position[:]
         self.max_x = 0  # Maximum x-coordinate reached.
 
     def update(self, time_delta):
+        self._old_position = self.position[:]
+
         self.position[0] += self.velocity[0] * time_delta
         self.position[1] += self.velocity[1] * time_delta
+
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
 
         self.max_x = max(self.rect.center[0], self.max_x)
+
+    def move_back(self):
+        self.position = self._old_position
+        self.rect.topleft = self.position
+        self.feet.midbottom = self.rect.midbottom
 
     def handle_input(self, event, up=False):
         speed = PLAYER_SPEED
@@ -60,3 +69,9 @@ class Player(pygame.sprite.Sprite):
                 left_pressed = any(current_keys[k] for k in LEFT_KEYS)
                 speed = 0 if not left_pressed else -PLAYER_SPEED
             self.velocity[0] = speed
+
+    def collides(self, obstacles):
+        for obstacle in obstacles:
+            if self.rect.colliderect(obstacle):
+                return True
+        return False
