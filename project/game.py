@@ -125,9 +125,9 @@ class Game:
                     obj.x, obj.y, obj.width, obj.height)
                 self.collisions['rects'].append(rect)
 
+
 def main():
     pygame.init()
-    # pygame.font.init()
 
     try:
         game = Game()
