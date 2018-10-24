@@ -79,6 +79,7 @@ class Player(pygame.sprite.Sprite):
     def collides(self, obstacles: List[pygame.Rect]):
         if self.feet.collidelist(obstacles) > -1:
             self.is_jumping = False
+            self.velocity[1] = 0
             self.position = self._old_position
             self.rect.topleft = self.position
             self.feet.midbottom = self.rect.midbottom
