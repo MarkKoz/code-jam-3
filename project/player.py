@@ -2,19 +2,22 @@ import pygame
 
 PLAYER_SPEED = 200
 
-# Key constants
-UP_KEYS = (pygame.K_UP, pygame.K_w)
-DOWN_KEYS = (pygame.K_DOWN, pygame.K_s)
+# constants
 
+PLAYER_SPEED = 300
+GRAVITY = -20
+
+# inputs
 LEFT_KEYS = (pygame.K_LEFT, pygame.K_a)
 RIGHT_KEYS = (pygame.K_RIGHT, pygame.K_d)
+JUMP_KEYS = (pygame.K_SPACE, pygame.K_w, pygame.K_UP)
 
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, *groups):
         super().__init__(*groups)
 
-        self.image = pygame.Surface((32, 48))
+        self.image = pygame.Surface((16, 32))
         self.image.fill(pygame.Color('yellow'))
         self.rect = self.image.get_rect()
         self.feet = pygame.Rect(0, 0, self.rect.width * 0.5, 8)
@@ -23,12 +26,18 @@ class Player(pygame.sprite.Sprite):
         self.position = [0, 0]
         self._old_position = self.position[:]
         self.max_x = 0  # Maximum x-coordinate reached.
+        self.is_jumping = False
 
     def update(self, time_delta, walls):
         self._old_position = self.position[:]
 
         self.position[0] += self.velocity[0] * time_delta
-        self.position[1] += self.velocity[1] * time_delta
+
+        # vertical movement
+        if self.is_jumping:
+            self.velocity[1] -= -50 * time_delta
+
+        self.position[1] += self.velocity[1]
 
         self.rect.topleft = self.position
         self.feet.midbottom = self.rect.midbottom
@@ -50,16 +59,11 @@ class Player(pygame.sprite.Sprite):
         current_keys = pygame.key.get_pressed()
 
         # vertical keys
-        if key in UP_KEYS:
-            if up:
-                down_pressed = any(current_keys[k] for k in DOWN_KEYS)
-                speed = 0 if not down_pressed else -PLAYER_SPEED
-            self.velocity[1] = -speed
-        elif key in DOWN_KEYS:
-            if up:
-                up_pressed = any(current_keys[k] for k in UP_KEYS)
-                speed = 0 if not up_pressed else -PLAYER_SPEED
-            self.velocity[1] = speed
+        if key in JUMP_KEYS and self.is_jumping is False:
+
+            if not up:
+                self.is_jumping = True
+                self.velocity[1] = -15
 
         # horizontal keys
         elif key in LEFT_KEYS:
@@ -74,4 +78,7 @@ class Player(pygame.sprite.Sprite):
             self.velocity[0] = speed
 
     def collides(self, obstacles):
-        return self.feet.collidelist(obstacles) > -1
+        if self.feet.collidelist(obstacles) > -1:
+            self.is_jumping = False
+            return True
+        return False
