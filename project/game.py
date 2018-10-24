@@ -93,7 +93,7 @@ class Game:
         tmx_data = load_pygame(MAP_PATH)  # Load data from pytmx
 
         # TODO: Maybe use an enum if we get a lot of properties and layers
-        for x, y, gid in tmx_data.get_layer_by_name("Land"):
+        for x, y, gid in tmx_data.get_layer_by_name("land"):
             properties = tmx_data.get_tile_properties_by_gid(gid)
             if properties and properties.get("COLLISION"):
                 self.walls.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
