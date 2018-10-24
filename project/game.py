@@ -16,6 +16,7 @@ TILE_SIZE = 32
 class Game:
     def __init__(self):
         self.running = False
+        self.debug = False
         self.screen = None
         self.surface = None
         self.collisions = defaultdict(list)
@@ -41,6 +42,14 @@ class Game:
         self.group.center(camera_pos)
         self.group.draw(surface)
 
+        if self.debug:
+            self.debug_info(surface)
+
+    def debug_info(self, surface):
+        font = pygame.font.SysFont('Arial', 14)
+        font_surface = font.render(repr(self.player), False, (255, 255, 255), (0, 0, 0))
+        surface.blit(font_surface, (0, 0))
+
     def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -57,7 +66,8 @@ class Game:
                 self.handle_input(event, True)
 
     def handle_input(self, event, up=False):
-        pass
+        if event.key == pygame.K_i and not up:
+            self.debug = not self.debug
 
     def update(self, time_delta):
         self.group.update(time_delta, self.collisions)
@@ -114,7 +124,6 @@ class Game:
                 rect = pygame.Rect(
                     obj.x, obj.y, obj.width, obj.height)
                 self.collisions['rects'].append(rect)
-
 
 def main():
     pygame.init()

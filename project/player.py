@@ -27,7 +27,7 @@ class Player(pygame.sprite.Sprite):
         self.position = [0, 0]
         self._old_position = self.position[:]
         self.max_x = 0  # Maximum x-coordinate reached.
-        self.is_jumping = False
+        self.is_jumping = True
 
     def update(self, time_delta, collisions):
         self._old_position = self.position[:]
@@ -59,7 +59,6 @@ class Player(pygame.sprite.Sprite):
 
         # vertical keys
         if key in JUMP_KEYS and self.is_jumping is False:
-
             if not up:
                 self.is_jumping = True
                 self.velocity[1] = -15
@@ -77,19 +76,32 @@ class Player(pygame.sprite.Sprite):
             self.velocity[0] = speed
 
     def collides(self, obstacles: List[pygame.Rect]):
-        if self.feet.collidelist(obstacles) > -1:
+        index = self.feet.collidelist(obstacles)
+        if index > -1:
+            collision_rect = obstacles[index]
+
             self.is_jumping = False
             self.velocity[1] = 0
-            self.position = self._old_position
+            self.position = [self._old_position[0], collision_rect.top - self.rect.height]
             self.rect.topleft = self.position
             self.feet.midbottom = self.rect.midbottom
 
             return True
 
     def collides_slope(self, objects: List[pytmx.TiledObject]):
+        if self.velocity[1] < 0:
+            return
+
+        player_x = self.rect.x + self.rect.width
         for obj in objects:
+            if not ((obj.x <= self.rect.left <= obj.x + obj.width) or (obj.x <= self.rect.right <= obj.x + obj.width)):
+                continue
+
+            if self.rect.bottom < obj.y - obj.height:
+                continue
+
             # Player's x relative to the collision object
-            x = self.rect.x + self.rect.width - obj.x
+            x = player_x - obj.x
             top = -1 * x + obj.y  # y = mx + b
 
             if x > obj.width:
@@ -98,7 +110,11 @@ class Player(pygame.sprite.Sprite):
                 self.is_jumping = False
                 self.velocity[1] = 0
                 self.position[1] = obj.y - obj.height - self.rect.height
-            elif self.rect.y + self.rect.height > top:
+
+            elif self.rect.bottom > top - self.feet.width:
                 self.is_jumping = False
                 self.velocity[1] = 0
                 self.position[1] = top - self.rect.height
+
+    def __repr__(self):
+        return f'{self.rect.x}, {self.rect.y}'
