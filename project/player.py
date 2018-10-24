@@ -34,6 +34,9 @@ class Player(pygame.sprite.Sprite):
 
         self.position[0] += self.velocity[0] * time_delta
 
+        # prevent player from moving further left than the screen
+        self.position[0] = max(self.groups()[0].view[0], self.position[0])
+
         # vertical movement
         if self.is_jumping:
             self.velocity[1] -= GRAVITY * time_delta
