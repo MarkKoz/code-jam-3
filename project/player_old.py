@@ -1,14 +1,15 @@
 import pygame
 
+
 # constants
 
 PLAYER_SPEED = 300
-GRAVITY = -50
+GRAVITY = -20
 
 # inputs
 LEFT_KEYS = (pygame.K_LEFT, pygame.K_a)
 RIGHT_KEYS = (pygame.K_RIGHT, pygame.K_d)
-JUMP_KEYS = (pygame.K_SPACE, pygame.K_w, pygame.K_UP)
+JUMP_KEYS = (pygame.K_SPACE, pygame.K_w)
 
 
 class Player(pygame.sprite.Sprite):
@@ -25,15 +26,19 @@ class Player(pygame.sprite.Sprite):
         self._old_position = self.position[:]
         self.max_x = 0  # Maximum x-coordinate reached.
         self.is_jumping = False
+        self.jump_lifted = False
 
-    def update(self, time_delta, walls):
+    def update(self, time_delta):
         self._old_position = self.position[:]
 
         self.position[0] += self.velocity[0] * time_delta
 
         # vertical movement
         if self.is_jumping:
-            self.velocity[1] -= GRAVITY * time_delta
+            if self.jump_lifted:
+                self.velocity[1] -= -500 * time_delta
+            else:
+                self.velocity[1] -= -50 * time_delta
 
         self.position[1] += self.velocity[1]
 
@@ -41,9 +46,6 @@ class Player(pygame.sprite.Sprite):
         self.feet.midbottom = self.rect.midbottom
 
         self.max_x = max(self.rect.center[0], self.max_x)
-
-        if self.collides(walls['rects']):
-            self.move_back()
 
     def move_back(self):
         self.position = self._old_position
@@ -58,8 +60,9 @@ class Player(pygame.sprite.Sprite):
 
         # vertical keys
         if key in JUMP_KEYS and self.is_jumping is False:
-
-            if not up:
+            if up:
+                self.jump_lifted = True
+            else:
                 self.is_jumping = True
                 self.velocity[1] = -15
 
@@ -76,7 +79,9 @@ class Player(pygame.sprite.Sprite):
             self.velocity[0] = speed
 
     def collides(self, obstacles):
-        if self.feet.collidelist(obstacles) > -1:
-            self.is_jumping = False
-            return True
+        for obstacle in obstacles:
+            if self.rect.colliderect(obstacle):
+                self.is_jumping = False
+                self.jump_lifted = False
+                return True
         return False
