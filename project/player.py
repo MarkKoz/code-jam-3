@@ -71,7 +71,4 @@ class Player(pygame.sprite.Sprite):
             self.velocity[0] = speed
 
     def collides(self, obstacles):
-        for obstacle in obstacles:
-            if self.rect.colliderect(obstacle):
-                return True
-        return False
+        return self.feet.collidelist(obstacles) > -1

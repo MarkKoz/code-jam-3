@@ -104,8 +104,7 @@ class Game:
 
         # Create new renderer (camera)
         return pyscroll.BufferedRenderer(
-            map_data, (w / 2, h / 2), clamp_camera=True
-        )
+            map_data, (w / 2, h / 2), clamp_camera=True)
 
 
 def main():
