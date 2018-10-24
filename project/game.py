@@ -1,5 +1,6 @@
 import pygame
 import pyscroll
+import pytmx
 from pytmx.util_pygame import load_pygame
 
 from project.player import Player
@@ -31,6 +32,7 @@ class Game:
         self.group.add(self.player)
 
     def draw(self, surface):
+        # Prevents the camera from tracking the player when moving left
         camera_pos = list(self.player.rect.center)
         camera_pos[0] = max(camera_pos[0], self.player.max_x)
 
@@ -93,11 +95,13 @@ class Game:
         """Loads map data and creates a renderer."""
         tmx_data = load_pygame(MAP_PATH)  # Load data from pytmx
 
-        # TODO: Maybe use an enum if we get a lot of properties and layers
-        for x, y, gid in tmx_data.get_layer_by_name("land"):
-            properties = tmx_data.get_tile_properties_by_gid(gid)
-            if properties and properties.get("COLLISION"):
-                self.walls.append(pygame.Rect(x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
+        # TODO: Pixel-perfect collision detection for polygons
+        obj: pytmx.TiledObject
+        for obj in tmx_data.objects:
+            print(f'({obj.x}, {obj.y}): {obj.width} x {obj.height}')
+            rect = pygame.Rect(
+                obj.x, obj.y, obj.width, obj.height)
+            self.walls.append(rect)
 
         # Create new data source for pyscroll
         map_data = pyscroll.data.TiledMapData(tmx_data)
