@@ -107,7 +107,6 @@ class Game:
         # TODO: Pixel-perfect collision detection for polygons
         obj: pytmx.TiledObject
         for obj in tmx_data.objects:
-            print(f'({obj.x}, {obj.y}): {obj.width} x {obj.height}')
             points = getattr(obj, 'points', None)
             if points:
                 self.collisions['slopes'].append(obj)

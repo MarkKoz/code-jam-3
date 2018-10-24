@@ -1,4 +1,7 @@
+from typing import List
+
 import pygame
+import pytmx
 
 # constants
 
@@ -26,7 +29,7 @@ class Player(pygame.sprite.Sprite):
         self.max_x = 0  # Maximum x-coordinate reached.
         self.is_jumping = False
 
-    def update(self, time_delta, walls):
+    def update(self, time_delta, collisions):
         self._old_position = self.position[:]
 
         self.position[0] += self.velocity[0] * time_delta
@@ -42,8 +45,10 @@ class Player(pygame.sprite.Sprite):
 
         self.max_x = max(self.rect.center[0], self.max_x)
 
-        if self.collides(walls['rects']):
+        if self.collides(collisions['rects']):
             self.move_back()
+        else:
+            self.collides_slope(collisions['slopes'])
 
     def move_back(self):
         self.position = self._old_position
@@ -75,8 +80,25 @@ class Player(pygame.sprite.Sprite):
                 speed = 0 if not left_pressed else -PLAYER_SPEED
             self.velocity[0] = speed
 
-    def collides(self, obstacles):
+    def collides(self, obstacles: List[pygame.Rect]):
         if self.feet.collidelist(obstacles) > -1:
             self.is_jumping = False
             return True
         return False
+
+    def collides_slope(self, objects: List[pytmx.TiledObject]):
+        for obj in objects:
+            # Player's x relative to the collision object
+            x = self.rect.x + self.rect.width - obj.x
+            top = -1 * x + obj.y  # y = mx + b
+
+            if x > obj.width:
+                # Prevents weird behaviour when at the top of the slope.
+                # Sets the player's y to the top of the slope.
+                self.is_jumping = False
+                self.velocity[1] = 0
+                self.position[1] = obj.y - obj.height - self.rect.height
+            elif self.rect.y + self.rect.height > top:
+                self.is_jumping = False
+                self.velocity[1] = 0
+                self.position[1] = top - self.rect.height
