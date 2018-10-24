@@ -24,7 +24,7 @@ class Player(pygame.sprite.Sprite):
         self._old_position = self.position[:]
         self.max_x = 0  # Maximum x-coordinate reached.
 
-    def update(self, time_delta):
+    def update(self, time_delta, walls):
         self._old_position = self.position[:]
 
         self.position[0] += self.velocity[0] * time_delta
@@ -34,6 +34,9 @@ class Player(pygame.sprite.Sprite):
         self.feet.midbottom = self.rect.midbottom
 
         self.max_x = max(self.rect.center[0], self.max_x)
+
+        if self.collides(walls['rects']):
+            self.move_back()
 
     def move_back(self):
         self.position = self._old_position

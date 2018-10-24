@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 import pygame
 import pyscroll
 import pytmx
@@ -16,7 +18,7 @@ class Game:
         self.running = False
         self.screen = None
         self.surface = None
-        self.walls = []
+        self.collisions = defaultdict(list)
 
         self.set_screen(*DEFAULT_SIZE)
         self.map_layer = self.init_map()
@@ -58,10 +60,7 @@ class Game:
         pass
 
     def update(self, time_delta):
-        self.group.update(time_delta)
-
-        if self.player.collides(self.walls):
-            self.player.move_back()
+        self.group.update(time_delta, self.collisions)
 
     def run(self):
         """Starts the game's main loop."""
@@ -94,14 +93,7 @@ class Game:
     def init_map(self):
         """Loads map data and creates a renderer."""
         tmx_data = load_pygame(MAP_PATH)  # Load data from pytmx
-
-        # TODO: Pixel-perfect collision detection for polygons
-        obj: pytmx.TiledObject
-        for obj in tmx_data.objects:
-            print(f'({obj.x}, {obj.y}): {obj.width} x {obj.height}')
-            rect = pygame.Rect(
-                obj.x, obj.y, obj.width, obj.height)
-            self.walls.append(rect)
+        self.populate_collisions(tmx_data)
 
         # Create new data source for pyscroll
         map_data = pyscroll.data.TiledMapData(tmx_data)
@@ -110,6 +102,19 @@ class Game:
         # Create new renderer (camera)
         return pyscroll.BufferedRenderer(
             map_data, (w / 2, h / 2), clamp_camera=True)
+
+    def populate_collisions(self, tmx_data: pytmx.TiledMap):
+        # TODO: Pixel-perfect collision detection for polygons
+        obj: pytmx.TiledObject
+        for obj in tmx_data.objects:
+            print(f'({obj.x}, {obj.y}): {obj.width} x {obj.height}')
+            points = getattr(obj, 'points', None)
+            if points:
+                self.collisions['slopes'].append(obj)
+            else:
+                rect = pygame.Rect(
+                    obj.x, obj.y, obj.width, obj.height)
+                self.collisions['rects'].append(rect)
 
 
 def main():
