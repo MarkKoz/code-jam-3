@@ -45,15 +45,8 @@ class Player(pygame.sprite.Sprite):
 
         self.max_x = max(self.rect.center[0], self.max_x)
 
-        if self.collides(collisions['rects']):
-            self.move_back()
-        else:
+        if not self.collides(collisions['rects']):
             self.collides_slope(collisions['slopes'])
-
-    def move_back(self):
-        self.position = self._old_position
-        self.rect.topleft = self.position
-        self.feet.midbottom = self.rect.midbottom
 
     def handle_input(self, event, up=False):
         speed = PLAYER_SPEED
@@ -83,8 +76,11 @@ class Player(pygame.sprite.Sprite):
     def collides(self, obstacles: List[pygame.Rect]):
         if self.feet.collidelist(obstacles) > -1:
             self.is_jumping = False
+            self.position = self._old_position
+            self.rect.topleft = self.position
+            self.feet.midbottom = self.rect.midbottom
+
             return True
-        return False
 
     def collides_slope(self, objects: List[pytmx.TiledObject]):
         for obj in objects:
