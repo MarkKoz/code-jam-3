@@ -89,15 +89,19 @@ class Player(pygame.sprite.Sprite):
             return True
 
     def collides_slope(self, objects: List[pytmx.TiledObject]):
+        # Don't check slopes if jumping up
         if self.velocity[1] < 0:
             return
 
         player_x = self.rect.x + self.rect.width
         for obj in objects:
+            # Skip slopes not in the same area as player
             if not ((obj.x <= self.rect.left <= obj.x + obj.width) or (obj.x <= self.rect.right <= obj.x + obj.width)):
                 continue
 
-            if self.rect.bottom < obj.y - obj.height:
+            # Skip if player is above the slope with offset of 5
+            # This is to prevent snapping when jumping above the top of the slope
+            if self.rect.bottom <= obj.y - obj.height - 5:
                 continue
 
             # Player's x relative to the collision object
