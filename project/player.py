@@ -139,14 +139,14 @@ class Player(pygame.sprite.Sprite):
 
             return True
 
-    def collides_slope(self, objects: List[pytmx.TiledObject]):
+    def collides_slope(self, objects: List[pytmx.TiledObject]) -> bool:
         # Don't check slopes if jumping up
         if self.velocity[1] < 0:
-            return
+            return False
 
         for obj in objects:
             # Skip slopes not in the same area as player
-            if not ((obj.x <= self.rect.left <= obj.x + obj.width) or (obj.x <= self.rect.right <= obj.x + obj.width)):
+            if not (obj.x <= self.rect.left <= obj.x + obj.width or obj.x <= self.rect.right <= obj.x + obj.width):
                 continue
 
             # TODO: Remove leeway of 5 because flat surface collision isn't precise
@@ -161,28 +161,29 @@ class Player(pygame.sprite.Sprite):
 
             slope = self._get_slope(obj.points)
             x = self._get_relative_x(obj)
-            top = self._slope_intercept(obj, slope, x)
+            y = self._slope_intercept(obj, slope, x)
 
             if self.orientation == 90:
                 compare = operator.lt if slope < 0 else operator.gt
             else:
                 compare = operator.gt if slope < 0 else operator.lt
 
+            # Prevents weird behaviour when at the end of the slope.
             if self.orientation == 90 and x > obj.width:
-                # Prevents weird behaviour when at the end of the slope.
-                self.is_jumping = False
-                self.velocity[1] = 0
-                self.position[1] = self._slope_intercept(obj, slope, obj.width) - self.rect.height
+                y = self._slope_intercept(obj, slope, obj.width)
             elif self.orientation == 270 and x < 0:
-                # Prevents weird behaviour when at the end of the slope.
+                y = self._slope_intercept(obj, slope, 0)
+            elif not compare(y, self.rect.bottom):
+                y = None
+
+            if y is not None:
                 self.is_jumping = False
                 self.velocity[1] = 0
-                self.position[1] = self._slope_intercept(obj, slope, 0) - self.rect.height
-            elif compare(top, self.rect.bottom):
-                self.is_jumping = False
-                self.velocity[1] = 0
-                self.position[1] = top - self.rect.height
-            return True
+                self.position[1] = y - self.rect.height
+
+                return True
+
+        return False
 
     def _get_relative_x(self, obj: pytmx.TiledObject) -> float:
         """Returns player's x position relative to the collision object."""
