@@ -46,10 +46,9 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, time_delta, collisions):
         self._old_position = self.position[:]
-
         self.position[0] += self.velocity[0] * time_delta
 
-        # prevent player from moving further left than the screen
+        # Prevents movement further left than the screen.
         self.position[0] = max(self.groups()[0].view[0], self.position[0])
 
         # vertical movement
@@ -57,13 +56,9 @@ class Player(pygame.sprite.Sprite):
             self.velocity[1] -= GRAVITY * time_delta
 
         self.position[1] += self.velocity[1]
-
         self.rect.topleft = self.position
 
         self.max_x = max(self.rect.center[0], self.max_x)
-
-        # if not self.collides(collisions['rects']):
-        #     self.collides_slope(collisions['slopes'])
 
         if not self.collides_slope(collisions['slopes']):
             self.collides(collisions['rects'])
