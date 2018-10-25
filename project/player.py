@@ -120,7 +120,6 @@ class Player(pygame.sprite.Sprite):
         if self.velocity[1] < 0:
             return
 
-        player_x = self.rect.x + self.rect.width
         for obj in objects:
             # Skip slopes not in the same area as player
             if not ((obj.x <= self.rect.left <= obj.x + obj.width) or (obj.x <= self.rect.right <= obj.x + obj.width)):
@@ -132,15 +131,13 @@ class Player(pygame.sprite.Sprite):
             #     continue
 
             slope = self._get_slope(obj.points)
+            x = self._get_relative_x(obj)
+            top = self._slope_intercept(obj, slope, x)
 
             if self.orientation == 90:
                 compare = operator.lt if slope < 0 else operator.gt
             else:
                 compare = operator.gt if slope < 0 else operator.lt
-
-            b = obj.y if slope < 0 else obj.y - obj.height  # y-intercept
-            x = player_x - obj.x  # Player's x relative to the collision object
-            top = slope * x + b  # y = mx + b
 
             # if x > obj.width:
             #     # Prevents weird behaviour when at the top of the slope.
@@ -153,15 +150,28 @@ class Player(pygame.sprite.Sprite):
                 self.velocity[1] = 0
                 self.position[1] = top - self.rect.height
 
+    def _get_relative_x(self, obj) -> float:
+        """Returns player's x position relative to the collision object."""
+        player_x = self.rect.x + self.rect.width
+        return player_x - obj.x
+
+    @staticmethod
+    def _slope_intercept(obj, slope, x) -> float:
+        """For a given x, calculates the y position on a slope."""
+        b = obj.y if slope < 0 else obj.y - obj.height  # y-intercept
+        return slope * x + b  # y = mx + b
+
     @staticmethod
     def _point_distance(p: Tuple[Tuple[float]]) -> float:
+        """Calculates the distance between two points."""
         return math.sqrt((p[0][0] - p[1][0]) ** 2 + (p[0][1] - p[1][1]) ** 2)
 
     @staticmethod
     def _get_slope(points: Tuple[Tuple[float]]) -> float:
+        """Determines the slope of a triangle given its points."""
         combs = combinations(points, 2)
-        a, b = max(combs, key=Player._point_distance)
-        return (b[1] - a[1]) / (b[0] - a[0])
+        a, b = max(combs, key=Player._point_distance)  # Finds the longest side; it's the hypotenuse
+        return (b[1] - a[1]) / (b[0] - a[0])  # (y2 - y1) / (x2 - x2)
 
     def __repr__(self):
         return f'{self.rect.x}, {self.rect.y}'
