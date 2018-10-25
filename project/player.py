@@ -23,7 +23,7 @@ class Player(pygame.sprite.Sprite):
 
         self.image = pygame.Surface((16, 32))
         self.image.fill(pygame.Color('yellow'))
-        self.rect = self.image.get_rect()
+        self.rect: pygame.Rect = self.image.get_rect()
         self.feet = pygame.Rect(0, 0, self.rect.width * 0.5, 8)
 
         self.velocity = [0, 0]
@@ -103,13 +103,27 @@ class Player(pygame.sprite.Sprite):
             self.velocity[0] = speed
 
     def collides(self, obstacles: List[pygame.Rect]):
-        index = self.feet.collidelist(obstacles)
+        index = self.rect.collidelist(obstacles)
         if index > -1:
             collision_rect = obstacles[index]
 
-            self.is_jumping = False
-            self.velocity[1] = 0
-            self.position = [self._old_position[0], collision_rect.top - self.rect.height]
+            top_left = collision_rect.collidepoint(self.rect.topleft)
+            top_right = collision_rect.collidepoint(self.rect.topright)
+            bottom_left = collision_rect.collidepoint(self.rect.bottomleft)
+            bottom_right = collision_rect.collidepoint(self.rect.bottomright)
+
+            if (top_left and bottom_left) or (top_right and bottom_right):
+                self.position[0] = self._old_position[0]
+
+            elif top_left and top_right:
+                self.velocity[1] = 0
+                self.position = [self._old_position[0], collision_rect.bottom]
+
+            elif bottom_left and bottom_right:
+                self.is_jumping = False
+                self.velocity[1] = 0
+                self.position = [self._old_position[0], collision_rect.top - self.rect.height]
+
             self.rect.topleft = self.position
             self.feet.midbottom = self.rect.midbottom
 
