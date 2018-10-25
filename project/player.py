@@ -64,8 +64,11 @@ class Player(pygame.sprite.Sprite):
 
         self.max_x = max(self.rect.center[0], self.max_x)
 
-        if not self.collides(collisions['rects']):
-            self.collides_slope(collisions['slopes'])
+        # if not self.collides(collisions['rects']):
+        #     self.collides_slope(collisions['slopes'])
+
+        if not self.collides_slope(collisions['slopes']):
+            self.collides(collisions['rects'])
 
     def handle_input(self, event, up=False):
         speed = PLAYER_SPEED
@@ -128,6 +131,17 @@ class Player(pygame.sprite.Sprite):
                 self.velocity[1] = 0
                 self.position = [self._old_position[0], collision_rect.top - self.rect.height]
 
+            # TODO: These checks need to be changed to reflect intended behavior. Copied to prevent falling through
+            elif top_left or bottom_left:
+                self.is_jumping = False
+                self.velocity[1] = 0
+                self.position = [self._old_position[0], collision_rect.top - self.rect.height]
+
+            elif top_right or bottom_right:
+                self.is_jumping = False
+                self.velocity[1] = 0
+                self.position = [self._old_position[0], collision_rect.top - self.rect.height]
+
             self.rect.topleft = self.position
             self.feet.midbottom = self.rect.midbottom
 
@@ -176,6 +190,7 @@ class Player(pygame.sprite.Sprite):
                 self.is_jumping = False
                 self.velocity[1] = 0
                 self.position[1] = top - self.rect.height
+            return True
 
     def _get_relative_x(self, obj: pytmx.TiledObject) -> float:
         """Returns player's x position relative to the collision object."""
