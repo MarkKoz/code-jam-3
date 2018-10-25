@@ -1,4 +1,5 @@
 import math
+import operator
 from itertools import combinations
 from typing import List, Tuple
 
@@ -127,21 +128,27 @@ class Player(pygame.sprite.Sprite):
 
             # Skip if player is above the slope with offset of 5
             # This is to prevent snapping when jumping above the top of the slope
-            if self.rect.bottom <= obj.y - obj.height - 5:
-                continue
+            # if self.rect.bottom <= obj.y - obj.height - 5:
+            #     continue
 
             slope = self._get_slope(obj.points)
+
+            if self.orientation == 90:
+                compare = operator.lt if slope < 0 else operator.gt
+            else:
+                compare = operator.gt if slope < 0 else operator.lt
+
             b = obj.y if slope < 0 else obj.y - obj.height  # y-intercept
             x = player_x - obj.x  # Player's x relative to the collision object
             top = slope * x + b  # y = mx + b
 
-            if x > obj.width:
-                # Prevents weird behaviour when at the top of the slope.
-                # Sets the player's y to the top of the slope.
-                self.is_jumping = False
-                self.velocity[1] = 0
-                self.position[1] = obj.y - obj.height - self.rect.height
-            elif self.rect.bottom > top - self.feet.width:
+            # if x > obj.width:
+            #     # Prevents weird behaviour when at the top of the slope.
+            #     # Sets the player's y to the top of the slope.
+            #     self.is_jumping = False
+            #     self.velocity[1] = 0
+            #     self.position[1] = obj.y - obj.height - self.rect.height
+            if compare(top, self.rect.bottom):
                 self.is_jumping = False
                 self.velocity[1] = 0
                 self.position[1] = top - self.rect.height
