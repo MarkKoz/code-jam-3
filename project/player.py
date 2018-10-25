@@ -122,11 +122,10 @@ class Player(pygame.sprite.Sprite):
 
         for obj in objects:
             # Skip slopes not in the same area as player
-            if not (
-                (obj.x <= self.rect.left <= obj.x + obj.width)
-                or (obj.x <= self.rect.right <= obj.x + obj.width)
-                or (obj.y >= self.rect.bottom >= obj.y - obj.height)
-            ):
+            if not ((obj.x <= self.rect.left <= obj.x + obj.width) or (obj.x <= self.rect.right <= obj.x + obj.width)):
+                continue
+
+            if self.rect.bottom > obj.y or self.rect.bottom < obj.y - obj.height:
                 continue
 
             # Skip if player is above the slope with offset of 5
