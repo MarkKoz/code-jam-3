@@ -127,6 +127,7 @@ class Player(pygame.sprite.Sprite):
 
             # Skip if player is above the slope with offset of 5
             # This is to prevent snapping when jumping above the top of the slope
+            # TODO: With this enabled, it's possible to fall off the map when landing on the slope.
             # if self.rect.bottom <= obj.y - obj.height - 5:
             #     continue
 
@@ -139,13 +140,17 @@ class Player(pygame.sprite.Sprite):
             else:
                 compare = operator.gt if slope < 0 else operator.lt
 
-            # if x > obj.width:
-            #     # Prevents weird behaviour when at the top of the slope.
-            #     # Sets the player's y to the top of the slope.
-            #     self.is_jumping = False
-            #     self.velocity[1] = 0
-            #     self.position[1] = obj.y - obj.height - self.rect.height
-            if compare(top, self.rect.bottom):
+            if self.orientation == 90 and x > obj.width:
+                # Prevents weird behaviour when at the end of the slope.
+                self.is_jumping = False
+                self.velocity[1] = 0
+                self.position[1] = self._slope_intercept(obj, slope, obj.width) - self.rect.height
+            elif self.orientation == 270 and x < 0:
+                # Prevents weird behaviour when at the end of the slope.
+                self.is_jumping = False
+                self.velocity[1] = 0
+                self.position[1] = self._slope_intercept(obj, slope, 0) - self.rect.height
+            elif compare(top, self.rect.bottom):
                 self.is_jumping = False
                 self.velocity[1] = 0
                 self.position[1] = top - self.rect.height
