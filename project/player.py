@@ -24,7 +24,6 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.Surface((16, 32))
         self.image.fill(pygame.Color('yellow'))
         self.rect: pygame.Rect = self.image.get_rect()
-        self.feet = pygame.Rect(0, 0, self.rect.width * 0.5, 8)
 
         self.velocity = [0, 0]
         self.position = [0, 0]
@@ -60,7 +59,6 @@ class Player(pygame.sprite.Sprite):
         self.position[1] += self.velocity[1]
 
         self.rect.topleft = self.position
-        self.feet.midbottom = self.rect.midbottom
 
         self.max_x = max(self.rect.center[0], self.max_x)
 
@@ -143,7 +141,6 @@ class Player(pygame.sprite.Sprite):
                 self.position = [self._old_position[0], collision_rect.top - self.rect.height]
 
             self.rect.topleft = self.position
-            self.feet.midbottom = self.rect.midbottom
 
             return True
 
