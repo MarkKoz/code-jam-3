@@ -125,7 +125,8 @@ class Player(pygame.sprite.Sprite):
             if not ((obj.x <= self.rect.left <= obj.x + obj.width) or (obj.x <= self.rect.right <= obj.x + obj.width)):
                 continue
 
-            if self.rect.bottom > obj.y or self.rect.bottom < obj.y - obj.height:
+            # TODO: Remove leeway of 5 because flat surface collision isn't precise
+            if self.rect.bottom - 5 > obj.y or self.rect.bottom + 5 < obj.y - obj.height:
                 continue
 
             # Skip if player is above the slope with offset of 5
