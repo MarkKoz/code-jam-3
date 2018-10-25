@@ -27,9 +27,18 @@ class Player(pygame.sprite.Sprite):
 
         self.velocity = [0, 0]
         self.position = [0, 0]
+        self._orientation = 90  # In degrees. 0 = up, goes clockwise.
         self._old_position = self.position[:]
         self.max_x = 0  # Maximum x-coordinate reached.
         self.is_jumping = True
+
+    @property
+    def orientation(self):
+        return self._orientation
+
+    @orientation.setter
+    def orientation(self, degrees):
+        self._orientation = degrees % 360
 
     def update(self, time_delta, collisions):
         self._old_position = self.position[:]
@@ -55,6 +64,7 @@ class Player(pygame.sprite.Sprite):
 
     def handle_input(self, event, up=False):
         speed = PLAYER_SPEED
+        orientation = self.orientation
 
         key = event.key
         current_keys = pygame.key.get_pressed()
@@ -70,11 +80,25 @@ class Player(pygame.sprite.Sprite):
             if up:
                 right_pressed = any(current_keys[k] for k in RIGHT_KEYS)
                 speed = 0 if not right_pressed else -PLAYER_SPEED
+
+                if right_pressed:
+                    orientation = 90
+            else:
+                orientation = -90
+
+            self.orientation = orientation
             self.velocity[0] = -speed
         elif key in RIGHT_KEYS:
             if up:
                 left_pressed = any(current_keys[k] for k in LEFT_KEYS)
                 speed = 0 if not left_pressed else -PLAYER_SPEED
+
+                if left_pressed:
+                    orientation = -90
+            else:
+                orientation = 90
+
+            self.orientation = orientation
             self.velocity[0] = speed
 
     def collides(self, obstacles: List[pygame.Rect]):
