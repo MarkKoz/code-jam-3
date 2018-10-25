@@ -165,7 +165,7 @@ class Player(pygame.sprite.Sprite):
 
     def _get_relative_x(self, obj: pytmx.TiledObject) -> float:
         """Returns player's x position relative to the collision object."""
-        player_x = self.rect.x + self.rect.width
+        player_x = self.rect.x + self.rect.width * 0.5
         return player_x - obj.x
 
     @staticmethod
