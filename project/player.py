@@ -28,18 +28,22 @@ class Player(pygame.sprite.Sprite):
 
         self.velocity = [0, 0]
         self.position = [0, 0]
-        self._orientation = 90  # In degrees. 0 = up, goes clockwise.
+        self._orientation = 90
         self._old_position = self.position[:]
         self.max_x = 0  # Maximum x-coordinate reached.
         self.is_jumping = True
 
     @property
     def orientation(self):
+        """The direction the player is facing, in degrees.
+
+        Directions are clockwise with 0 representing up.
+        """
         return self._orientation
 
     @orientation.setter
     def orientation(self, degrees):
-        self._orientation = degrees % 360
+        self._orientation = degrees % 360  # Ensures range is 0-360.
 
     def update(self, time_delta, collisions):
         self._old_position = self.position[:]
@@ -139,7 +143,8 @@ class Player(pygame.sprite.Sprite):
             if not ((obj.x <= self.rect.left <= obj.x + obj.width) or (obj.x <= self.rect.right <= obj.x + obj.width)):
                 continue
 
-            if self.rect.bottom > obj.y or self.rect.bottom < obj.y - obj.height:
+            # TODO: Remove leeway of 5 because flat surface collision isn't precise
+            if self.rect.bottom - 5 > obj.y or self.rect.bottom + 5 < obj.y - obj.height:
                 continue
 
             # Skip if player is above the slope with offset of 5
@@ -172,13 +177,13 @@ class Player(pygame.sprite.Sprite):
                 self.velocity[1] = 0
                 self.position[1] = top - self.rect.height
 
-    def _get_relative_x(self, obj) -> float:
+    def _get_relative_x(self, obj: pytmx.TiledObject) -> float:
         """Returns player's x position relative to the collision object."""
-        player_x = self.rect.x + self.rect.width
+        player_x = self.rect.x + self.rect.width * 0.5
         return player_x - obj.x
 
     @staticmethod
-    def _slope_intercept(obj, slope, x) -> float:
+    def _slope_intercept(obj: pytmx.TiledObject, slope: float, x: float) -> float:
         """For a given x, calculates the y position on a slope."""
         b = obj.y if slope < 0 else obj.y - obj.height  # y-intercept
         return slope * x + b  # y = mx + b
