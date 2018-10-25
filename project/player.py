@@ -1,4 +1,6 @@
-from typing import List
+import math
+from itertools import combinations
+from typing import List, Tuple
 
 import pygame
 import pytmx
@@ -104,9 +106,10 @@ class Player(pygame.sprite.Sprite):
             if self.rect.bottom <= obj.y - obj.height - 5:
                 continue
 
-            # Player's x relative to the collision object
-            x = player_x - obj.x
-            top = -1 * x + obj.y  # y = mx + b
+            slope = self._get_slope(obj.points)
+            b = obj.y if slope < 0 else obj.y - obj.height  # y-intercept
+            x = player_x - obj.x  # Player's x relative to the collision object
+            top = slope * x + b  # y = mx + b
 
             if x > obj.width:
                 # Prevents weird behaviour when at the top of the slope.
@@ -114,11 +117,20 @@ class Player(pygame.sprite.Sprite):
                 self.is_jumping = False
                 self.velocity[1] = 0
                 self.position[1] = obj.y - obj.height - self.rect.height
-
             elif self.rect.bottom > top - self.feet.width:
                 self.is_jumping = False
                 self.velocity[1] = 0
                 self.position[1] = top - self.rect.height
+
+    @staticmethod
+    def _point_distance(p: Tuple[Tuple[float]]) -> float:
+        return math.sqrt((p[0][0] - p[1][0]) ** 2 + (p[0][1] - p[1][1]) ** 2)
+
+    @staticmethod
+    def _get_slope(points: Tuple[Tuple[float]]) -> float:
+        combs = combinations(points, 2)
+        a, b = max(combs, key=Player._point_distance)
+        return (b[1] - a[1]) / (b[0] - a[0])
 
     def __repr__(self):
         return f'{self.rect.x}, {self.rect.y}'
