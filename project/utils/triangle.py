@@ -14,6 +14,22 @@ class Triangle:
         self.points = tuple(Point(*p) for p in obj.points)
         self.slope = self._get_slope()
 
+    @property
+    def x(self) -> float:
+        return self.origin.x
+
+    @property
+    def y(self) -> float:
+        return self.origin.y
+
+    @property
+    def width(self) -> int:
+        return self.size.width
+
+    @property
+    def height(self) -> int:
+        return self.size.height
+
     def slope_intercept(self, x: float) -> float:
         """For a given x, calculates the y position on the slope."""
         b = self.origin.y if self.slope < 0 else self.origin.y - self.size.height  # y-intercept
