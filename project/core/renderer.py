@@ -27,6 +27,10 @@ class Renderer:
         self.group.center(camera_pos)
         self.group.draw(self.surface)
 
+    def resize(self, width, height):
+        self._set_screen(width, height)
+        self.map_layer.set_size((width / 2, height / 2))
+
     def _draw_debug_info(self, player: Player):
         # TODO: Move somewhere else?
         font = pygame.font.SysFont('Arial', 14)
@@ -34,11 +38,6 @@ class Renderer:
         self.surface.blit(font_surface, (0, 0))
 
     def update(self, player: Player, debug: bool):
-        for event in pygame.event.get():
-            if event.type == pygame.VIDEORESIZE:
-                self._set_screen(event.w, event.h)
-                self.map_layer.set_size((event.w / 2, event.h / 2))
-
         self.draw(player)
         if debug:
             self._draw_debug_info(player)

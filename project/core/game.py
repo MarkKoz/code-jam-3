@@ -40,6 +40,8 @@ class Game:
             if event.type == pygame.QUIT:
                 self.running = False
                 break
+            elif event.type == pygame.VIDEORESIZE:
+                self.renderer.resize(event.w, event.h)
             elif event.type == pygame.KEYDOWN:
                 self.handle_input(event)
             elif event.type == pygame.KEYUP:
