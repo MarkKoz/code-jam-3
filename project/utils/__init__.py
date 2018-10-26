@@ -1,5 +1,5 @@
 from .direction import Direction
-from .point import Point
+from .point import Dimensions, Point
 from .triangle import Triangle
 
-__all__ = ['Direction', 'Point', 'Triangle']
+__all__ = ['Dimensions', 'Direction', 'Point', 'Triangle']

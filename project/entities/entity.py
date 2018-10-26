@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 
-from utils.point import Point
+from utils.point import Dimensions, Point
 
 
 class Entity(ABC):
     def __init__(self, **kwargs):
         self.position: Point = kwargs.get('position', Point(0, 0))
         self.velocity: Point = kwargs.get('velocity', Point(0, 0))
-        self.size: Point = kwargs.get('size', Point(0, 0))
+        self.size: Dimensions = kwargs.get('size', Dimensions(0, 0))
         self._orientation: float = kwargs.get('orientation', 0)
 
     @property

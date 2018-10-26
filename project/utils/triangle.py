@@ -4,19 +4,19 @@ from typing import Tuple
 
 import pytmx
 
-from utils import Point
+from utils import Dimensions, Point
 
 
 class Triangle:
     def __init__(self, obj: pytmx.TiledObject):
         self.origin = Point(obj.x, obj.y)
-        self.size = Point(obj.width, obj.height)
+        self.size = Dimensions(obj.width, obj.height)
         self.points = tuple(Point(*p) for p in obj.points)
         self.slope = self._get_slope()
 
     def slope_intercept(self, x: float) -> float:
         """For a given x, calculates the y position on the slope."""
-        b = self.origin.y if self.slope < 0 else self.origin.y - self.size.y  # y-intercept
+        b = self.origin.y if self.slope < 0 else self.origin.y - self.size.height  # y-intercept
         return self.slope * x + b  # y = mx + b
 
     def _get_slope(self) -> float:
