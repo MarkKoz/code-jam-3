@@ -15,8 +15,9 @@ class Game:
         self.running = False
         self.debug = False
 
+        self.renderer = Renderer(DEFAULT_SIZE)
         self.world = World(MAP_PATH)
-        self.renderer = Renderer(DEFAULT_SIZE, self.world.map_data)
+        self.renderer.load_map(self.world.map_data)
         self.player = None
 
         self.add_player()

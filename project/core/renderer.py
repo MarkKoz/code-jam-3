@@ -1,16 +1,20 @@
 import pygame
 import pyscroll
 
-from entities.player.player_entity import Player
+from entities.player import Player
 from utils import Dimensions
 
 
 class Renderer:
-    def __init__(self, resolution: Dimensions, map_data: pyscroll.data.TiledMapData):
+    def __init__(self, resolution: Dimensions):
         self.screen: pygame.Surface = None
         self.surface: pygame.Surface = None
         self._set_screen(*resolution)
 
+        self.map_layer = None
+        self.group = None
+
+    def load_map(self, map_data: pyscroll.data.TiledMapData):
         w, h = self.screen.get_size()
         self.map_layer = pyscroll.BufferedRenderer(map_data, (w / 2, h / 2), clamp_camera=True)
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=4)
