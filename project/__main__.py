@@ -1,3 +1,3 @@
-from . import game
+from core import game
 
 game.main()
