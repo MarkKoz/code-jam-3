@@ -21,13 +21,14 @@ class PlayerInputComponent(InputComponent):
     @staticmethod
     def _move(player: Player, direction: Direction, up: bool):
         current_keys = pygame.key.get_pressed()
+        accel = ACCELERATION if direction == direction.RIGHT else -ACCELERATION
 
         if up:
             if any(current_keys[k] for k in CONTROLS[-direction % 360]):
-                player.velocity.x = -ACCELERATION
+                player.velocity.x = -accel
                 player.orientation = -direction
             else:
                 player.velocity.x = 0
         else:
-            player.velocity.x = -ACCELERATION
+            player.velocity.x = accel
             player.orientation = direction
