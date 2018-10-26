@@ -7,7 +7,6 @@ from utils import Point
 
 class PlayerPhysicsComponent(PhysicsComponent):
     def __init__(self):
-        self.max_x: float = 0  # Maximum x-coordinate reached.
         self._old_position: Point = Point(0, 0)
 
     def update(self, player: Player, time_delta):
@@ -20,4 +19,4 @@ class PlayerPhysicsComponent(PhysicsComponent):
         player.position.y += player.velocity.y * time_delta
         player.rect.topleft = player.position
 
-        self.max_x = max(player.rect.centerx, self.max_x)
+        player.max_x = max(player.rect.centerx, player.max_x)

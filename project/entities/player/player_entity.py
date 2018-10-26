@@ -13,6 +13,8 @@ class Player(Entity, pygame.sprite.Sprite):
         self.image.fill(pygame.Color('yellow'))
         self.rect: pygame.Rect = self.image.get_rect()
 
+        self.max_x: float = 0  # Maximum x-coordinate reached.
+
         self._graphics = graphics
         self._input = _input
         self._physics = physics
