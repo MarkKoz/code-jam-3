@@ -79,13 +79,13 @@ class PlayerPhysicsComponent(PhysicsComponent):
             if player.rect.bottom - 5 > obj.y or player.rect.bottom + 5 < obj.y - obj.height:
                 continue
 
-            # TODO: Skip if player is above the slope with offset of 5
-            # This is to prevent snapping when jumping above the top of the slope
-            # if player.rect.bottom <= obj.y - obj.height - 5:
-            #     continue
-
             x = player.rect.x + player.rect.width * 0.5 - obj.x  # Player's x relative to the object
             y = obj.slope_intercept(x)
+
+            # Skip if player is more than 1 unit above the slope.
+            # This prevents snapping to the bottom while jumping over the slope.
+            if player.rect.bottom <= y - 1:
+                continue
 
             # Prevents weird behaviour when at the end of the slope.
             if player.orientation == Direction.RIGHT and x > obj.width:
