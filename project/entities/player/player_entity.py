@@ -25,9 +25,9 @@ class Player(Entity):
 
     @orientation.setter
     def orientation(self, direction: int):
-        if direction % 360 not in (Direction.LEFT, Direction.RIGHT):
+        self._orientation = direction % 360
+        if self._orientation not in (Direction.LEFT, Direction.RIGHT):
             raise ValueError('Player\'s orientation may only be left or right.')
-        self._orientation = int(direction)
 
     def update(self, time_delta: float, key_events, world):
         for key, up in key_events:
