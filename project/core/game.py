@@ -13,7 +13,7 @@ MAP_PATH = 'assets/map.tmx'
 class Game:
     def __init__(self):
         self.running = False
-        self.debug = False
+        self.debug = True
 
         self.renderer = Renderer(DEFAULT_SIZE)
         self.world = World(MAP_PATH)

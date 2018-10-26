@@ -28,7 +28,9 @@ class PlayerPhysicsComponent(PhysicsComponent):
         player.max_x = max(player.rect.centerx, player.max_x)
 
         if not self._handle_slope_collision(player, world.slopes):
-            self._handle_rect_collision(player, world.rects)
+            if not self._handle_rect_collision(player, world.rects) and not player.is_jumping:
+                player.velocity.y -= GRAVITY * time_delta
+                player.is_jumping = True
 
     def _handle_rect_collision(self, player: Player, objects: Sequence[pygame.Rect]) -> bool:
         index = player.rect.collidelist(objects)
@@ -48,16 +50,16 @@ class PlayerPhysicsComponent(PhysicsComponent):
             elif bottom_left and bottom_right:
                 player.is_jumping = False
                 player.velocity.y = 0
-                player.position = Point(self._old_position.x, obj.top - player.rect.height)
+                player.position.y = obj.top - player.rect.height + 1
             # TODO: These checks need to be changed to reflect intended behavior. Copied to prevent falling through
             elif top_left or bottom_left:
                 player.is_jumping = False
                 player.velocity.y = 0
-                player.position = Point(self._old_position.x, obj.top - player.rect.height)
+                player.position.y = obj.top - player.rect.height + 1
             elif top_right or bottom_right:
                 player.is_jumping = False
                 player.velocity.y = 0
-                player.position = Point(self._old_position.x, obj.top - player.rect.height)
+                player.position.y = obj.top - player.rect.height + 1
 
                 player.rect.topleft = player.position
 
@@ -98,7 +100,9 @@ class PlayerPhysicsComponent(PhysicsComponent):
             elif player.orientation == Direction.LEFT and x < 0:
                 y = obj.slope_intercept(0)
             elif not compare(y, player.rect.bottom):
-                y = None
+                y += 5
+            else:
+                y += 1
 
             if y is not None:
                 player.is_jumping = False

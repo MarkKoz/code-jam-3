@@ -34,8 +34,12 @@ class Renderer:
     def _draw_debug_info(self, player: Player):
         # TODO: Move somewhere else?
         font = pygame.font.SysFont('Arial', 14)
-        font_surface = font.render(repr(player), False, (255, 255, 255), (0, 0, 0))
-        self.surface.blit(font_surface, (0, 0))
+        text = repr(player).split('\n')
+        height = 0
+        for line in text:
+            font_surface: pygame.Surface = font.render(line, False, (255, 255, 255), (0, 0, 0))
+            self.surface.blit(font_surface, (0, height))
+            height += font_surface.get_height()
 
     def update(self, player: Player, debug: bool):
         self.draw(player)
