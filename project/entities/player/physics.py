@@ -8,6 +8,8 @@ from .player_entity import Player
 from components import PhysicsComponent
 from utils import Direction, Triangle, Point
 
+GRAVITY = -50
+
 
 class PlayerPhysicsComponent(PhysicsComponent):
     def update(self, player: Player, time_delta: float, world):
@@ -17,7 +19,10 @@ class PlayerPhysicsComponent(PhysicsComponent):
         # Prevents movement further left than the screen.
         player.position.x = max(player.groups()[0].view[0], player.position.x)
 
-        player.position.y += player.velocity.y * time_delta
+        if player.is_jumping:
+            player.velocity.y -= GRAVITY * time_delta
+
+        player.position.y += player.velocity.y
         player.rect.topleft = player.position
 
         player.max_x = max(player.rect.centerx, player.max_x)

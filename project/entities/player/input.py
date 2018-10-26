@@ -5,6 +5,7 @@ from components import InputComponent
 from utils import Direction
 
 ACCELERATION = 300
+JUMP_KEYS = (pygame.K_SPACE, pygame.K_w, pygame.K_UP)
 CONTROLS = {
     Direction.LEFT: (pygame.K_LEFT, pygame.K_a),
     Direction.RIGHT: (pygame.K_RIGHT, pygame.K_d)
@@ -13,7 +14,10 @@ CONTROLS = {
 
 class PlayerInputComponent(InputComponent):
     def update(self, player: Player, key: int, up: bool):
-        if key in CONTROLS[Direction.LEFT]:
+        if not up and not player.is_jumping and key in JUMP_KEYS:
+            player.is_jumping = True
+            player.velocity.y = -15
+        elif key in CONTROLS[Direction.LEFT]:
             self._move(player, Direction.LEFT, up)
         elif key in CONTROLS[Direction.RIGHT]:
             self._move(player, Direction.RIGHT, up)

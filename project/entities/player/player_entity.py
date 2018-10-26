@@ -10,6 +10,8 @@ class Player(Entity):
         super().__init__(*groups, **kwargs)
 
         self.max_x: float = 0  # Maximum x-coordinate reached.
+        self.is_jumping: bool = False
+
         self._graphics = graphics
         self._input = inp
         self._physics = physics
