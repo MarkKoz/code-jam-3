@@ -1,8 +1,8 @@
 from pygame.sprite import Sprite
 
 from components import GraphicsComponent, InputComponent, PhysicsComponent
-from entities.entity import Entity
-from utils.direction import Direction
+from entities import Entity
+from utils import Direction
 
 
 class Player(Entity, Sprite):
