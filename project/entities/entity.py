@@ -28,3 +28,6 @@ class Entity(sprite.Sprite, ABC):
     @abstractmethod
     def update(self, *args):
         raise NotImplementedError
+
+    def __repr__(self):
+        return f'{self.position.x * 0.5:.2f}, {self.position.y + self.size.height:.2f}'
