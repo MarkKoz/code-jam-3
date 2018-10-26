@@ -28,7 +28,6 @@ class PlayerPhysicsComponent(PhysicsComponent):
 
         if not self._handle_slope_collision(player, world.slopes):
             if not self._handle_rect_collision(player, world.rects) and not player.is_jumping:
-                player.velocity.y -= GRAVITY * time_delta
                 player.is_jumping = True
 
     def _handle_rect_collision(self, player: Player, objects: Sequence[pygame.Rect]) -> bool:
