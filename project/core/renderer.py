@@ -1,6 +1,7 @@
 import pygame
 import pyscroll
 
+from entities.player.player_entity import Player
 from utils import Dimensions
 
 
@@ -14,10 +15,31 @@ class Renderer:
         self.map_layer = pyscroll.BufferedRenderer(map_data, (w / 2, h / 2), clamp_camera=True)
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=4)
 
-    def draw(self, camera_pos):
+    def draw(self, player: Player):
+        # Prevents the camera from tracking the player when moving left
+        camera_pos = list(player.rect.center)
+        camera_pos[0] = max(camera_pos[0], player.max_x)
+
         self.group.center(camera_pos)
         self.group.draw(self.surface)
 
+    def _draw_debug_info(self, player: Player):
+        # TODO: Move somewhere else?
+        font = pygame.font.SysFont('Arial', 14)
+        font_surface = font.render(repr(player), False, (255, 255, 255), (0, 0, 0))
+        self.surface.blit(font_surface, (0, 0))
+
+    def update(self, player: Player, debug: bool):
+        for event in pygame.event.get():
+            if event.type == pygame.VIDEORESIZE:
+                self._set_screen(event.w, event.h)
+                self.map_layer.set_size((event.w / 2, event.h / 2))
+
+        self.draw(player)
+        if debug:
+            self._draw_debug_info(player)
+
+        # Resizes the surface and sets it as the new screen.
         pygame.transform.scale(self.surface, self.screen.get_size(), self.screen)
         pygame.display.flip()  # Updates the display.
 
