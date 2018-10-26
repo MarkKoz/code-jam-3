@@ -1,13 +1,17 @@
-from pygame.sprite import Sprite
+import pygame
 
 from components import GraphicsComponent, InputComponent, PhysicsComponent
 from entities import Entity
 from utils import Direction
 
 
-class Player(Entity, Sprite):
+class Player(Entity, pygame.sprite.Sprite):
     def __init__(self, graphics: GraphicsComponent, _input: InputComponent, physics: PhysicsComponent, **kwargs):
         super().__init__(**kwargs)
+
+        self.image = pygame.Surface(self.size)
+        self.image.fill(pygame.Color('yellow'))
+        self.rect: pygame.Rect = self.image.get_rect()
 
         self._graphics = graphics
         self._input = _input
