@@ -46,10 +46,8 @@ class Game:
                 self.renderer.resize(event.w, event.h)
             elif event.type == pygame.KEYDOWN:
                 key_events.append((event.key, False))
-                self.handle_input(event.key)
             elif event.type == pygame.KEYUP:
                 key_events.append((event.key, True))
-                self.handle_input(event.key, True)
 
         return key_events
 
