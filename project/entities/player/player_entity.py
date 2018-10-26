@@ -5,10 +5,9 @@ from entities import Entity
 from utils import Direction
 
 
-class Player(Entity, pygame.sprite.Sprite):
+class Player(Entity):
     def __init__(self, graphics: GraphicsComponent, inp: InputComponent, physics: PhysicsComponent, *groups, **kwargs):
-        pygame.sprite.Sprite.__init__(self, *groups)
-        Entity.__init__(self, **kwargs)
+        super().__init__(*groups, **kwargs)
 
         self.image = pygame.Surface(self.size)
         self.image.fill(pygame.Color('yellow'))

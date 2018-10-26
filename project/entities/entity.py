@@ -1,10 +1,14 @@
 from abc import ABC, abstractmethod
 
+import pygame
+
 from utils.point import Dimensions, Point
 
 
-class Entity(ABC):
-    def __init__(self, **kwargs):
+class Entity(pygame.sprite.Sprite, ABC):
+    def __init__(self, *groups, **kwargs):
+        super().__init__(*groups)
+
         self.position: Point = kwargs.get('position', Point(0, 0))
         self.velocity: Point = kwargs.get('velocity', Point(0, 0))
         self.size: Dimensions = kwargs.get('size', Dimensions(0, 0))
