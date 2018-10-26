@@ -1,7 +1,7 @@
-from attr import dataclass
+import attr
 
 
-@dataclass
+@attr.s(slots=True, auto_attribs=True)
 class Point:
-    x: float = 0
-    y: float = 0
+    x: float = attr.ib()
+    y: float = attr.ib()
