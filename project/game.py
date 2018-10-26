@@ -16,7 +16,7 @@ TILE_SIZE = 32
 class Game:
     def __init__(self):
         self.running = False
-        self.debug = False
+        self.debug = True
         self.screen = None
         self.surface = None
         self.collisions = defaultdict(list)
@@ -47,8 +47,12 @@ class Game:
 
     def debug_info(self, surface):
         font = pygame.font.SysFont('Arial', 14)
-        font_surface = font.render(repr(self.player), False, (255, 255, 255), (0, 0, 0))
-        surface.blit(font_surface, (0, 0))
+        text = repr(self.player).split('\n')
+        height = 0
+        for line in text:
+            font_surface: pygame.Surface = font.render(line, False, (255, 255, 255), (0, 0, 0))
+            surface.blit(font_surface, (0, height))
+            height += font_surface.get_height()
 
     def handle_events(self):
         for event in pygame.event.get():

@@ -30,7 +30,7 @@ class Player(pygame.sprite.Sprite):
         self._orientation = 90
         self._old_position = self.position[:]
         self.max_x = 0  # Maximum x-coordinate reached.
-        self.is_jumping = True
+        self.is_jumping = False
 
     @property
     def orientation(self):
@@ -61,7 +61,9 @@ class Player(pygame.sprite.Sprite):
         self.max_x = max(self.rect.center[0], self.max_x)
 
         if not self.collides_slope(collisions['slopes']):
-            self.collides(collisions['rects'])
+            if not self.collides(collisions['rects']) and not self.is_jumping:
+                self.velocity[1] -= GRAVITY * time_delta
+                self.is_jumping = True
 
     def handle_input(self, event, up=False):
         speed = PLAYER_SPEED
@@ -122,18 +124,18 @@ class Player(pygame.sprite.Sprite):
             elif bottom_left and bottom_right:
                 self.is_jumping = False
                 self.velocity[1] = 0
-                self.position = [self._old_position[0], collision_rect.top - self.rect.height]
+                self.position[1] = collision_rect.top - self.rect.height + 1
 
             # TODO: These checks need to be changed to reflect intended behavior. Copied to prevent falling through
             elif top_left or bottom_left:
                 self.is_jumping = False
                 self.velocity[1] = 0
-                self.position = [self._old_position[0], collision_rect.top - self.rect.height]
+                self.position[1] = collision_rect.top - self.rect.height + 1
 
             elif top_right or bottom_right:
                 self.is_jumping = False
                 self.velocity[1] = 0
-                self.position = [self._old_position[0], collision_rect.top - self.rect.height]
+                self.position[1] = collision_rect.top - self.rect.height + 1
 
             self.rect.topleft = self.position
 
@@ -174,7 +176,9 @@ class Player(pygame.sprite.Sprite):
             elif self.orientation == 270 and x < 0:
                 y = self._slope_intercept(obj, slope, 0)
             elif not compare(y, self.rect.bottom):
-                y = None
+                y += 5
+            else:
+                y += 1
 
             if y is not None:
                 self.is_jumping = False
@@ -209,4 +213,5 @@ class Player(pygame.sprite.Sprite):
         return (b[1] - a[1]) / (b[0] - a[0])  # (y2 - y1) / (x2 - x2)
 
     def __repr__(self):
-        return f'{self.rect.x}, {self.rect.y}'
+        return '{}\nV: ({:.3f}, {:.3f})\nJump: {}'.format(
+            self.rect, *self.velocity, self.is_jumping)
