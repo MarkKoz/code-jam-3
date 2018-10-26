@@ -1,5 +1,4 @@
 import copy
-import operator
 from typing import Sequence
 
 import pygame
@@ -80,35 +79,24 @@ class PlayerPhysicsComponent(PhysicsComponent):
             if player.rect.bottom - 5 > obj.y or player.rect.bottom + 5 < obj.y - obj.height:
                 continue
 
-            # Skip if player is above the slope with offset of 5
+            # TODO: Skip if player is above the slope with offset of 5
             # This is to prevent snapping when jumping above the top of the slope
-            # TODO: With this enabled, it's possible to fall off the map when landing on the slope.
-            # if self.rect.bottom <= obj.y - obj.height - 5:
+            # if player.rect.bottom <= obj.y - obj.height - 5:
             #     continue
 
             x = player.rect.x + player.rect.width * 0.5 - obj.x  # Player's x relative to the object
             y = obj.slope_intercept(x)
-
-            if player.orientation == Direction.RIGHT:
-                compare = operator.lt if obj.slope < 0 else operator.gt
-            else:
-                compare = operator.gt if obj.slope < 0 else operator.lt
 
             # Prevents weird behaviour when at the end of the slope.
             if player.orientation == Direction.RIGHT and x > obj.width:
                 y = obj.slope_intercept(obj.width)
             elif player.orientation == Direction.LEFT and x < 0:
                 y = obj.slope_intercept(0)
-            elif not compare(y, player.rect.bottom):
-                y += 5
-            else:
-                y += 1
 
-            if y is not None:
-                player.is_jumping = False
-                player.velocity.y = 0
-                player.position.y = y - player.rect.height
+            player.is_jumping = False
+            player.velocity.y = 0
+            player.position.y = y - player.rect.height + 5
 
-                return True
+            return True
 
         return False
