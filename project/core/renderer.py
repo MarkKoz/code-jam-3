@@ -1,8 +1,8 @@
 import pygame
 import pyscroll
 
-from entities.player import Player
-from utils import Dimensions
+from project.entities.player import Player
+from project.utils import Dimensions
 
 
 class Renderer:

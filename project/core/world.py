@@ -5,7 +5,7 @@ import pyscroll
 import pytmx
 from pytmx.util_pygame import load_pygame
 
-from utils import Triangle
+from project.utils import Triangle
 
 
 class World:

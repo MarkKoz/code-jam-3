@@ -1,4 +1,4 @@
-from utils import Point
+from project.utils import Point
 from .component import Component
 
 

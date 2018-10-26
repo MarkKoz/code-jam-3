@@ -4,8 +4,8 @@ from typing import Sequence
 
 import pygame
 
-from components import PhysicsComponent
-from utils import Direction, Point, Triangle
+from project.components import PhysicsComponent
+from project.utils import Direction, Point, Triangle
 from .player_entity import Player
 
 GRAVITY = -50

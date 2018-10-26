@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from pygame import Rect, Surface, sprite
 
-from utils.point import Dimensions, Point
+from project.utils.point import Dimensions, Point
 
 
 class Entity(sprite.Sprite, ABC):

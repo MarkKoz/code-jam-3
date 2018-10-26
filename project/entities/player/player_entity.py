@@ -1,8 +1,8 @@
 import pygame
 
-from components import GraphicsComponent, InputComponent, PhysicsComponent
-from entities import Entity
-from utils import Direction
+from project.components import GraphicsComponent, InputComponent, PhysicsComponent
+from project.entities import Entity
+from project.utils import Direction
 
 
 class Player(Entity):

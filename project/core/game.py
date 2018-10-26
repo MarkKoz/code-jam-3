@@ -1,9 +1,9 @@
 import pygame
 
-from core.renderer import Renderer
-from core.world import World
-from entities.player import Player, PlayerGraphicsComponent, PlayerInputComponent, PlayerPhysicsComponent
-from utils import Dimensions, Point
+from project.entities.player import Player, PlayerGraphicsComponent, PlayerInputComponent, PlayerPhysicsComponent
+from project.utils import Dimensions, Point
+from .renderer import Renderer
+from .world import World
 
 DEFAULT_SIZE = Dimensions(1280, 720)
 FPS = 60

@@ -1,7 +1,7 @@
 import pygame
 
-from components import InputComponent
-from utils import Direction
+from project.components import InputComponent
+from project.utils import Direction
 from .player_entity import Player
 
 ACCELERATION = 300

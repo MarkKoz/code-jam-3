@@ -1,4 +1,4 @@
-from components import GraphicsComponent
+from project.components import GraphicsComponent
 
 
 class PlayerGraphicsComponent(GraphicsComponent):

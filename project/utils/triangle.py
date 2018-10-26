@@ -4,7 +4,7 @@ from typing import Tuple
 
 import pytmx
 
-from utils import Dimensions, Point
+from project.utils import Dimensions, Point
 
 
 class Triangle:

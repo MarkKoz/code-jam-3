@@ -1,6 +1,6 @@
 import pygame
 
-from core import Game
+from .core import Game
 
 pygame.init()
 
