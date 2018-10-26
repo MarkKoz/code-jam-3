@@ -9,15 +9,12 @@ class Player(Entity):
     def __init__(self, graphics: GraphicsComponent, inp: InputComponent, physics: PhysicsComponent, *groups, **kwargs):
         super().__init__(*groups, **kwargs)
 
-        self.image = pygame.Surface(self.size)
-        self.image.fill(pygame.Color('yellow'))
-        self.rect: pygame.Rect = self.image.get_rect()
-
         self.max_x: float = 0  # Maximum x-coordinate reached.
-
         self._graphics = graphics
         self._input = inp
         self._physics = physics
+
+        self.image.fill(pygame.Color('yellow'))  # TODO: For testing purposes
 
     @property
     def orientation(self) -> Direction:
