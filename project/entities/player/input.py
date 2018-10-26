@@ -12,12 +12,7 @@ CONTROLS = {
 
 
 class PlayerInputComponent(InputComponent):
-    def update(self, player: Player):
-        try:
-            key, up = self._get_input_key()
-        except TypeError:
-            return
-
+    def update(self, player: Player, key: int, up: bool):
         if key in CONTROLS[Direction.LEFT]:
             self._move(player, Direction.LEFT, up)
         elif key in CONTROLS[Direction.RIGHT]:
@@ -28,7 +23,7 @@ class PlayerInputComponent(InputComponent):
         current_keys = set(pygame.key.get_pressed())
 
         if up:
-            if CONTROLS[Direction(-direction)] & current_keys:
+            if CONTROLS[Direction(-direction % 360)] & current_keys:
                 player.velocity.x = -ACCELERATION
                 player.orientation = -direction
             else:

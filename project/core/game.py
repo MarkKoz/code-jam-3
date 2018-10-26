@@ -36,6 +36,8 @@ class Game:
         self.renderer.group.add(self.player)
 
     def handle_events(self):
+        key_events = []
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -43,16 +45,23 @@ class Game:
             elif event.type == pygame.VIDEORESIZE:
                 self.renderer.resize(event.w, event.h)
             elif event.type == pygame.KEYDOWN:
-                self.handle_input(event)
+                key_events.append((event.key, False))
+                self.handle_input(event.key)
             elif event.type == pygame.KEYUP:
-                self.handle_input(event, True)
+                key_events.append((event.key, True))
+                self.handle_input(event.key, True)
 
-    def handle_input(self, event, up=False):
-        if event.key == pygame.K_i and not up:
+        return key_events
+
+    def handle_input(self, key, up=False):
+        if key == pygame.K_i and not up:
             self.debug = not self.debug
 
-    def update(self, time_delta):
-        self.renderer.group.update(time_delta, self.world)
+    def update(self, time_delta, key_events):
+        self.renderer.group.update(time_delta, key_events, self.world)
+
+        for e in key_events:
+            self.handle_input(*e)
 
     def run(self):
         """Starts the game's main loop."""
@@ -64,9 +73,9 @@ class Game:
                 # Gets number of seconds since last call
                 time_delta = clock.tick(FPS) / 1000
 
-                self.handle_events()
+                key_events = self.handle_events()
+                self.update(time_delta, key_events)
                 self.renderer.update(self.player, self.debug)
-                self.update(time_delta)
         except KeyboardInterrupt:
             self.running = False
             pygame.quit()

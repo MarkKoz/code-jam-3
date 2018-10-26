@@ -26,11 +26,13 @@ class Player(Entity, pygame.sprite.Sprite):
 
     @orientation.setter
     def orientation(self, direction: int):
-        if direction not in (Direction.LEFT, Direction.RIGHT):
+        if direction % 360 not in (Direction.LEFT, Direction.RIGHT):
             raise ValueError('Player\'s orientation may only be left or right.')
-        self._orientation = int(self._orientation)
+        self._orientation = int(direction)
 
-    def update(self, time_delta: float, world):
-        self._input.update(self)
+    def update(self, time_delta: float, key_events, world):
+        for key, up in key_events:
+            self._input.update(self, key, up)
+
         self._physics.update(self, time_delta)
         self._graphics.update()
