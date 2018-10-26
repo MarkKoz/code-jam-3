@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from pygame import sprite, Rect, Surface
+from pygame import Rect, Surface, sprite
 
 from utils.point import Dimensions, Point
 

@@ -1,5 +1,5 @@
-from .component import Component
 from utils import Point
+from .component import Component
 
 
 class PhysicsComponent(Component):

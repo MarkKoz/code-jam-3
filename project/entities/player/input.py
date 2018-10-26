@@ -1,8 +1,8 @@
 import pygame
 
-from .player_entity import Player
 from components import InputComponent
 from utils import Direction
+from .player_entity import Player
 
 ACCELERATION = 300
 JUMP_KEYS = (pygame.K_SPACE, pygame.K_w, pygame.K_UP)

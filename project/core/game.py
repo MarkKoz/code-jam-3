@@ -2,7 +2,7 @@ import pygame
 
 from core.renderer import Renderer
 from core.world import World
-from entities.player import Player, PlayerGraphicsComponent, PlayerPhysicsComponent, PlayerInputComponent
+from entities.player import Player, PlayerGraphicsComponent, PlayerInputComponent, PlayerPhysicsComponent
 from utils import Dimensions, Point
 
 DEFAULT_SIZE = Dimensions(1280, 720)

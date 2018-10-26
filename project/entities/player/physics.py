@@ -4,9 +4,9 @@ from typing import Sequence
 
 import pygame
 
-from .player_entity import Player
 from components import PhysicsComponent
-from utils import Direction, Triangle, Point
+from utils import Direction, Point, Triangle
+from .player_entity import Player
 
 GRAVITY = -50
 
