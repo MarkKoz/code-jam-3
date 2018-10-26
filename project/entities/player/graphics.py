@@ -2,4 +2,5 @@ from components import GraphicsComponent
 
 
 class PlayerGraphicsComponent(GraphicsComponent):
-    pass
+    def update(self, *args):
+        pass
