@@ -6,8 +6,8 @@ from utils import Direction
 
 ACCELERATION = 300
 CONTROLS = {
-    Direction.LEFT: {pygame.K_LEFT, pygame.K_a},
-    Direction.RIGHT: {pygame.K_RIGHT, pygame.K_d}
+    Direction.LEFT: (pygame.K_LEFT, pygame.K_a),
+    Direction.RIGHT: (pygame.K_RIGHT, pygame.K_d)
 }
 
 
@@ -20,10 +20,10 @@ class PlayerInputComponent(InputComponent):
 
     @staticmethod
     def _move(player: Player, direction: Direction, up: bool):
-        current_keys = set(pygame.key.get_pressed())
+        current_keys = pygame.key.get_pressed()
 
         if up:
-            if CONTROLS[Direction(-direction % 360)] & current_keys:
+            if any(current_keys[k] for k in CONTROLS[-direction % 360]):
                 player.velocity.x = -ACCELERATION
                 player.orientation = -direction
             else:
