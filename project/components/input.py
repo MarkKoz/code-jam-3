@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from typing import Optional, Tuple
 
 import pygame
@@ -6,9 +5,8 @@ import pygame
 from .component import Component
 
 
-class InputComponent(ABC, Component):
+class InputComponent(Component):
     @staticmethod
-    @abstractmethod
     def _get_input_key() -> Optional[Tuple[int, bool]]:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
