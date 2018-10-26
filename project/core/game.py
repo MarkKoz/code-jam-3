@@ -30,7 +30,8 @@ class Game:
             PlayerGraphicsComponent(),
             PlayerInputComponent(),
             PlayerPhysicsComponent(),
-            position=Point(64, bottom - 192)
+            position=Point(64, bottom - 192),
+            size=Dimensions(16, 32)
         )
         self.renderer.group.add(self.player)
 
