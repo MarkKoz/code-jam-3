@@ -30,5 +30,5 @@ class Player(Entity):
         for key, up in key_events:
             self._input.update(self, key, up)
 
-        self._physics.update(self, time_delta)
+        self._physics.update(self, time_delta, world)
         self._graphics.update()
