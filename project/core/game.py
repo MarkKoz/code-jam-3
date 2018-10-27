@@ -57,6 +57,8 @@ class Game:
     def handle_input(self, key, up=False):
         if key == pygame.K_i and not up:
             self.debug = not self.debug
+        elif key == pygame.K_g and not up:
+            self.world.gravity = 0 if self.world.gravity else -50
 
     def update(self, time_delta, key_events):
         self.renderer.group.update(time_delta, key_events, self.world)

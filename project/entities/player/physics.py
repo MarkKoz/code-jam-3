@@ -7,8 +7,6 @@ from project.components import PhysicsComponent
 from project.utils import Direction, Point, Triangle
 from .player_entity import Player
 
-GRAVITY = -50
-
 
 class PlayerPhysicsComponent(PhysicsComponent):
     def update(self, player: Player, time_delta: float, world):
@@ -19,7 +17,7 @@ class PlayerPhysicsComponent(PhysicsComponent):
         player.position.x = max(player.groups()[0].view[0], player.position.x)
 
         if player.is_jumping:
-            player.velocity.y -= GRAVITY * time_delta
+            player.velocity.y -= world.gravity * time_delta
 
         player.position.y += player.velocity.y
         player.rect.topleft = player.position

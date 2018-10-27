@@ -13,6 +13,7 @@ class World:
         tmx_data = load_pygame(file_path)  # Load data from pytmx
         self.map_data = pyscroll.data.TiledMapData(tmx_data)  # Create new data source for pyscroll
         self.rects, self.slopes = self._get_collisions(tmx_data)
+        self.gravity = -50
 
     @staticmethod
     def _get_collisions(tmx_data: pytmx.TiledMap) -> Tuple:
