@@ -66,7 +66,7 @@ class Game:
 
                 key_events, col_event = self.handle_events()
                 self.update(time_delta, key_events)
-                self.renderer.update(self.world.player, self.debug, col_event)
+                self.renderer.update(self.world.player, self.score, self.debug, col_event)
         except KeyboardInterrupt:
             self.running = False
             pygame.quit()

@@ -30,6 +30,13 @@ class Renderer:
         self.group.center(camera_pos)
         self.group.draw(self.surface)
 
+    def draw_score(self, score):
+        text = f'Score: {score}'
+        font = pygame.font.SysFont('Arial', 14)
+        font_surface: pygame.Surface = font.render(text, False, (255, 255, 255), (0, 0, 0))
+        x = self.surface.get_size()[0] - font_surface.get_width()
+        self.surface.blit(font_surface, (x, 0))
+
     def resize(self, width, height):
         self._set_screen(width, height)
         self.map_layer.set_size((width / 2, height / 2))
@@ -51,8 +58,9 @@ class Renderer:
             self.surface.blit(font_surface, (0, height))
             height += font_surface.get_height()
 
-    def update(self, player: Player, debug: bool, col_event):
+    def update(self, player: Player, score: int, debug: bool, col_event):
         self.draw(player)
+        self.draw_score(score)
         if debug:
             self._draw_debug_info(player, col_event)
 
