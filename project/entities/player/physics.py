@@ -70,14 +70,13 @@ class PlayerPhysicsComponent(PhysicsComponent):
 
         for obj in objects:
             # Skip slopes not in the same area as player
-            if not (obj.x <= player.rect.left <= obj.x + obj.width or obj.x <= player.rect.right <= obj.x + obj.width):
+            if not (
+                obj.x <= player.rect.centerx <= obj.x + obj.width
+                and obj.y >= player.rect.bottom - 1 >= obj.y - obj.height
+            ):
                 continue
 
-            # TODO: Remove leeway of 5 because flat surface collision isn't precise
-            if player.rect.bottom - 5 > obj.y or player.rect.bottom + 5 < obj.y - obj.height:
-                continue
-
-            x = player.rect.x + player.rect.width * 0.5 - obj.x  # Player's x relative to the object
+            x = player.rect.centerx - obj.x  # Player's x relative to the object
             y = obj.slope_intercept(x)
 
             # Skip if player is more than 1 unit above the slope.
