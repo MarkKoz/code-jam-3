@@ -18,6 +18,8 @@ class Game:
         self.world = World(MAP_PATH)
         self.renderer.load_world(self.world)
 
+        self.score = 0
+
     def handle_events(self):
         key_events = []
         col_event = None
@@ -34,6 +36,9 @@ class Game:
                 key_events.append((event.key, True))
             elif event.type == pygame.USEREVENT:
                 col_event = event
+            elif event.type == pygame.USEREVENT + 1:
+                self.score += 1
+                event.lemon.kill()
 
         return key_events, col_event
 

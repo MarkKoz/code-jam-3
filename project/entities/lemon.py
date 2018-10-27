@@ -1,6 +1,6 @@
 import pygame
 
-from utils import Dimensions
+from project.utils import Dimensions
 from . import Entity
 
 
@@ -12,5 +12,9 @@ class Lemon(Entity):
         self.rect: pygame.Rect = self.image.get_rect()
         self.size = Dimensions(*self.rect.size)
 
-    def update(self, *args):
+    def update(self, time_delta, key_events, world):
         self.rect.topleft = self.position
+
+        if self.rect.colliderect(world.player.rect):
+            event = pygame.event.Event(pygame.USEREVENT + 1, lemon=self)
+            pygame.event.post(event)
