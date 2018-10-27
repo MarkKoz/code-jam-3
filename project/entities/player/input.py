@@ -4,7 +4,6 @@ from project.components import InputComponent
 from project.utils import Direction
 from .player_entity import Player
 
-ACCELERATION = 300
 JUMP_KEYS = (pygame.K_SPACE, pygame.K_w, pygame.K_UP)
 CONTROLS = {
     Direction.LEFT: (pygame.K_LEFT, pygame.K_a),
@@ -13,7 +12,12 @@ CONTROLS = {
 
 
 class PlayerInputComponent(InputComponent):
+    def __init__(self):
+        self.acceleration = 300
+
     def update(self, player: Player, key: int, up: bool):
+        if key == pygame.K_LSHIFT and not up:
+            self.acceleration = 300 if self.acceleration == 20 else 20
         if not up and not player.is_jumping and key in JUMP_KEYS:
             player.is_jumping = True
             player.velocity.y = -15
@@ -22,10 +26,9 @@ class PlayerInputComponent(InputComponent):
         elif key in CONTROLS[Direction.RIGHT]:
             self._move(player, Direction.RIGHT, up)
 
-    @staticmethod
-    def _move(player: Player, direction: Direction, up: bool):
+    def _move(self, player: Player, direction: Direction, up: bool):
         current_keys = pygame.key.get_pressed()
-        accel = ACCELERATION if direction == direction.RIGHT else -ACCELERATION
+        accel = self.acceleration if direction == direction.RIGHT else -self.acceleration
 
         if up:
             if any(current_keys[k] for k in CONTROLS[-direction % 360]):
