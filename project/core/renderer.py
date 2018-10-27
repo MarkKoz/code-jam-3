@@ -1,6 +1,7 @@
 import pygame
 import pyscroll
 
+from .world import World
 from project.entities.player import Player
 from project.utils import Dimensions
 
@@ -14,10 +15,11 @@ class Renderer:
         self.map_layer = None
         self.group = None
 
-    def load_map(self, map_data: pyscroll.data.TiledMapData):
+    def load_map(self, world: World):
         w, h = self.screen.get_size()
-        self.map_layer = pyscroll.BufferedRenderer(map_data, (w / 2, h / 2), clamp_camera=True)
+        self.map_layer = pyscroll.BufferedRenderer(world.map_data, (w / 2, h / 2), clamp_camera=True)
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=4)
+        self.group.add(world.lemons)
 
     def draw(self, player: Player):
         # Prevents the camera from tracking the player when moving left

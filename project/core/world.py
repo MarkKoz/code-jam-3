@@ -5,7 +5,8 @@ import pyscroll
 import pytmx
 from pytmx.util_pygame import load_pygame
 
-from project.utils import Triangle
+from project.entities import Lemon
+from project.utils import Point, Triangle
 
 
 class World:
@@ -14,6 +15,11 @@ class World:
         self.map_data = pyscroll.data.TiledMapData(tmx_data)  # Create new data source for pyscroll
         self.rects, self.slopes = self._get_collisions(tmx_data)
         self.gravity = -50
+        self.lemons = [
+            Lemon(position=Point(192, 3136)),
+            Lemon(position=Point(288, 3104)),
+            Lemon(position=Point(384, 3072))
+        ]
 
     @staticmethod
     def _get_collisions(tmx_data: pytmx.TiledMap) -> Tuple:
