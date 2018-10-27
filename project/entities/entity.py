@@ -30,5 +30,5 @@ class Entity(sprite.Sprite, ABC):
         raise NotImplementedError
 
     def __repr__(self):
-        return '{}\nV: ({:.3f}, {:.3f})\nJump: {}'.format(
-            self.rect.bottomright, *self.velocity, self.is_jumping)
+        return 'x: {} {} {}\ny: {}\nV: ({:.3f}, {:.3f})\nJump: {}'.format(
+            self.rect.left, self.rect.centerx, self.rect.right, self.rect.bottom, *self.velocity, self.is_jumping)
