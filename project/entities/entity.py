@@ -31,4 +31,4 @@ class Entity(sprite.Sprite, ABC):
 
     def __repr__(self):
         return '{}\nV: ({:.3f}, {:.3f})\nJump: {}'.format(
-            self.rect, *self.velocity, self.is_jumping)
+            self.rect.bottomright, *self.velocity, self.is_jumping)

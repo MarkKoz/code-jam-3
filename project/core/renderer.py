@@ -31,20 +31,27 @@ class Renderer:
         self._set_screen(width, height)
         self.map_layer.set_size((width / 2, height / 2))
 
-    def _draw_debug_info(self, player: Player):
+    def _draw_debug_info(self, player: Player, col_event):
         # TODO: Move somewhere else?
-        font = pygame.font.SysFont('Arial', 14)
         text = repr(player).split('\n')
+        if col_event:
+            text.extend((
+                f'Collision: {col_event.collision}',
+                f'Position: {col_event.position} (offset: {col_event.offset})',
+                f'Surface: {col_event.surface}'
+            ))
+
+        font = pygame.font.SysFont('Arial', 14)
         height = 0
         for line in text:
             font_surface: pygame.Surface = font.render(line, False, (255, 255, 255), (0, 0, 0))
             self.surface.blit(font_surface, (0, height))
             height += font_surface.get_height()
 
-    def update(self, player: Player, debug: bool):
+    def update(self, player: Player, debug: bool, col_event):
         self.draw(player)
         if debug:
-            self._draw_debug_info(player)
+            self._draw_debug_info(player, col_event)
 
         # Resizes the surface and sets it as the new screen.
         pygame.transform.scale(self.surface, self.screen.get_size(), self.screen)

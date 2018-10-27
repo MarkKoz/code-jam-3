@@ -61,6 +61,7 @@ class PlayerPhysicsComponent(PhysicsComponent):
 
                 player.rect.topleft = player.position
 
+            self.post_collision('rect', obj.top, 1, (obj.topleft, obj.topright))
             return True
 
     @staticmethod
@@ -88,14 +89,15 @@ class PlayerPhysicsComponent(PhysicsComponent):
 
             # Prevents weird behaviour when at the end of the slope.
             if player.orientation == Direction.RIGHT and x > obj.width:
-                y = obj.slope_intercept(obj.width)
+                y = obj.hypotenuse[1].y
             elif player.orientation == Direction.LEFT and x < 0:
-                y = obj.slope_intercept(0)
+                y = obj.hypotenuse[0].y
 
             player.is_jumping = False
             player.velocity.y = 0
-            player.position.y = y - player.rect.height + 5
+            player.position.y = y - player.rect.height + 1
 
+            PlayerPhysicsComponent.post_collision('slope', int(y), 1, obj.hypotenuse)
             return True
 
         return False

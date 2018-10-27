@@ -37,6 +37,7 @@ class Game:
 
     def handle_events(self):
         key_events = []
+        col_event = None
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -48,8 +49,10 @@ class Game:
                 key_events.append((event.key, False))
             elif event.type == pygame.KEYUP:
                 key_events.append((event.key, True))
+            elif event.type == pygame.USEREVENT:
+                col_event = event
 
-        return key_events
+        return key_events, col_event
 
     def handle_input(self, key, up=False):
         if key == pygame.K_i and not up:
@@ -71,9 +74,9 @@ class Game:
                 # Gets number of seconds since last call
                 time_delta = clock.tick(FPS) / 1000
 
-                key_events = self.handle_events()
+                key_events, col_event = self.handle_events()
                 self.update(time_delta, key_events)
-                self.renderer.update(self.player, self.debug)
+                self.renderer.update(self.player, self.debug, col_event)
         except KeyboardInterrupt:
             self.running = False
             pygame.quit()
