@@ -1,9 +1,9 @@
 import pygame
 import pyscroll
 
-from .world import World
 from project.entities.player import Player
 from project.utils import Dimensions
+from .world import World
 
 
 class Renderer:
@@ -15,10 +15,11 @@ class Renderer:
         self.map_layer = None
         self.group = None
 
-    def load_map(self, world: World):
+    def load_world(self, world: World):
         w, h = self.screen.get_size()
         self.map_layer = pyscroll.BufferedRenderer(world.map_data, (w / 2, h / 2), clamp_camera=True)
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=4)
+        self.group.add(world.player)
         self.group.add(world.lemons)
 
     def draw(self, player: Player):

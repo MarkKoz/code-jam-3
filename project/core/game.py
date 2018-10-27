@@ -1,7 +1,6 @@
 import pygame
 
-from project.entities.player import Player, PlayerGraphicsComponent, PlayerInputComponent, PlayerPhysicsComponent
-from project.utils import Dimensions, Point
+from project.utils import Dimensions
 from .renderer import Renderer
 from .world import World
 
@@ -17,23 +16,7 @@ class Game:
 
         self.renderer = Renderer(DEFAULT_SIZE)
         self.world = World(MAP_PATH)
-        self.renderer.load_map(self.world)
-        self.player = None
-
-        self.add_player()
-
-    def add_player(self):
-        # y = 0 is top but the map starts at the bottom.
-        # TODO: Read spawn point from map file?
-        bottom = self.renderer.map_layer.data.map_size[1] * self.renderer.map_layer.data.tile_size[1]
-        self.player = Player(
-            PlayerGraphicsComponent(),
-            PlayerInputComponent(),
-            PlayerPhysicsComponent(),
-            position=Point(64, bottom - 192),
-            size=Dimensions(16, 32)
-        )
-        self.renderer.group.add(self.player)
+        self.renderer.load_world(self.world)
 
     def handle_events(self):
         key_events = []
@@ -78,7 +61,7 @@ class Game:
 
                 key_events, col_event = self.handle_events()
                 self.update(time_delta, key_events)
-                self.renderer.update(self.player, self.debug, col_event)
+                self.renderer.update(self.world.player, self.debug, col_event)
         except KeyboardInterrupt:
             self.running = False
             pygame.quit()
