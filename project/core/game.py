@@ -7,6 +7,7 @@ from .world import World
 DEFAULT_SIZE = Dimensions(1280, 720)
 FPS = 60
 MAP_PATH = 'assets/map.tmx'
+JUICE_FILL_RATE = 5
 
 
 class Game:
@@ -38,6 +39,7 @@ class Game:
                 col_event = event
             elif event.type == pygame.USEREVENT + 1:
                 self.score += 1
+                self.world.juice.size.height = self.score * JUICE_FILL_RATE
                 event.lemon.kill()
 
         return key_events, col_event

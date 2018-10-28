@@ -21,6 +21,7 @@ class Renderer:
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=4)
         self.group.add(world.player)
         self.group.add(world.lemons)
+        self.group.add(world.juice, layer=5)
 
     def draw(self, player: Player):
         # Prevents the camera from tracking the player when moving left
