@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.1" tiledversion="2018.09.12" orientation="orthogonal" renderorder="left-up" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="6" nextobjectid="40">
+<map version="1.1" tiledversion="2018.09.12" orientation="orthogonal" renderorder="left-up" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="99">
  <tileset firstgid="1" source="background.tsx"/>
  <tileset firstgid="233" source="tileset.tsx"/>
  <layer id="1" name="background" width="100" height="100">
@@ -68,6 +68,95 @@
   </object>
   <object id="39" x="1376" y="3168">
    <polygon points="0,0 0,-64 64,0"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="6" name="spawns">
+  <object id="41" name="lemon" x="160" y="3136">
+   <point/>
+  </object>
+  <object id="42" name="lemon" x="208" y="3103">
+   <point/>
+  </object>
+  <object id="43" name="lemon" x="256" y="3135">
+   <point/>
+  </object>
+  <object id="44" name="lemon" x="320" y="3103">
+   <point/>
+  </object>
+  <object id="45" name="lemon" x="415" y="3071">
+   <point/>
+  </object>
+  <object id="46" name="lemon" x="512" y="3069">
+   <point/>
+  </object>
+  <object id="47" name="lemon" x="671" y="3039">
+   <point/>
+  </object>
+  <object id="48" name="lemon" x="845" y="2995">
+   <point/>
+  </object>
+  <object id="49" name="lemon" x="944" y="2956">
+   <point/>
+  </object>
+  <object id="50" name="lemon" x="959" y="3070">
+   <point/>
+  </object>
+  <object id="51" name="lemon" x="1089" y="3071">
+   <point/>
+  </object>
+  <object id="52" name="lemon" x="1248" y="3069">
+   <point/>
+  </object>
+  <object id="53" name="lemon" x="1441" y="3103">
+   <point/>
+  </object>
+  <object id="54" name="lemon" x="1599" y="3135">
+   <point/>
+  </object>
+  <object id="55" name="lemon" x="1046" y="2885">
+   <point/>
+  </object>
+  <object id="56" name="lemon" x="1122" y="2916">
+   <point/>
+  </object>
+  <object id="57" name="lemon" x="1182" y="2937">
+   <point/>
+  </object>
+  <object id="58" name="lemon" x="1270" y="2901">
+   <point/>
+  </object>
+  <object id="59" name="lemon" x="1325" y="2867">
+   <point/>
+  </object>
+  <object id="60" name="lemon" x="1271" y="2845">
+   <point/>
+  </object>
+  <object id="61" name="lemon" x="1423" y="2853">
+   <point/>
+  </object>
+  <object id="62" name="lemon" x="1489" y="2815">
+   <point/>
+  </object>
+  <object id="64" name="lemon" x="1600" y="2815">
+   <point/>
+  </object>
+  <object id="65" name="lemon" x="1695" y="2816">
+   <point/>
+  </object>
+  <object id="66" name="lemon" x="1761" y="2846">
+   <point/>
+  </object>
+  <object id="67" name="lemon" x="1856" y="2845">
+   <point/>
+  </object>
+  <object id="68" name="lemon" x="1901" y="2881">
+   <point/>
+  </object>
+  <object id="69" name="lemon" x="1952" y="2895">
+   <point/>
+  </object>
+  <object id="98" name="player" x="96" y="3168">
+   <point/>
   </object>
  </objectgroup>
 </map>

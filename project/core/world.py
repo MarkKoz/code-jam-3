@@ -22,19 +22,8 @@ class World:
         right = self.map_data.map_size[0] * self.map_data.tile_size[0]
         bottom = self.map_data.map_size[1] * self.map_data.tile_size[1]
 
-        # TODO: Read spawn positions from map file?
-        self.player = Player(
-            PlayerGraphicsComponent(),
-            PlayerInputComponent(),
-            PlayerPhysicsComponent(),
-            position=Point(64, bottom - 192),
-            size=Dimensions(16, 32)
-        )
-        self.lemons = [
-            Lemon(position=Point(192, bottom - 64)),
-            Lemon(position=Point(288, bottom - 96)),
-            Lemon(position=Point(384, bottom - 128))
-        ]
+        self.player = self._get_player(tmx_data)
+        self.lemons = tuple(self._get_lemons(tmx_data))
         self.juice = Juice(size=Dimensions(right, 1), position=Point(0, bottom))
 
     @staticmethod
@@ -43,7 +32,7 @@ class World:
         slopes = []
 
         obj: pytmx.TiledObject
-        for obj in tmx_data.objects:
+        for obj in tmx_data.get_layer_by_name('collision'):
             points = getattr(obj, 'points', None)
             if points:
                 slopes.append(Triangle(obj))
@@ -52,3 +41,22 @@ class World:
                 rects.append(rect)
 
         return tuple(rects), tuple(slopes)
+
+    @staticmethod
+    def _get_lemons(tmx_data: pytmx.TiledMap):
+        obj: pytmx.TiledObject
+        for obj in tmx_data.get_layer_by_name('spawns'):
+            if obj.name == 'lemon':
+                yield Lemon(position=Point(obj.x, obj.y))
+
+    @staticmethod
+    def _get_player(tmx_data: pytmx.TiledMap):
+        player: pytmx.TiledObject = tmx_data.get_object_by_name('player')
+        size = Dimensions(16, 32)
+        return Player(
+            PlayerGraphicsComponent(),
+            PlayerInputComponent(),
+            PlayerPhysicsComponent(),
+            position=Point(player.x, player.y - size.height),
+            size=size
+        )
