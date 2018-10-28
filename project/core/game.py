@@ -41,6 +41,9 @@ class Game:
                 self.score += 1
                 self.world.juice.size.height = self.score * JUICE_FILL_RATE
                 event.lemon.kill()
+            elif event.type == pygame.USEREVENT + 2:
+                # TODO: Handle death
+                print('player died')
 
         return key_events, col_event
 

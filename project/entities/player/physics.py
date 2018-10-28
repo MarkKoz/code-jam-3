@@ -24,6 +24,11 @@ class PlayerPhysicsComponent(PhysicsComponent):
 
         player.max_x = max(player.rect.centerx, player.max_x)
 
+        # Player fell into the lemon juice.
+        if player.rect.colliderect(world.juice.rect):
+            event = pygame.event.Event(pygame.USEREVENT + 2)
+            pygame.event.post(event)
+
         if not self._handle_slope_collision(player, world.slopes):
             if not self._handle_rect_collision(player, world.rects) and not player.is_jumping:
                 player.is_jumping = True
