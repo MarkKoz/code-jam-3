@@ -10,17 +10,21 @@ CONTROLS = {
     Direction.RIGHT: (pygame.K_RIGHT, pygame.K_d)
 }
 
+ACCELERATION = 300
+WALK_ACCELERATION = 20
+JUMP_VELOCITY = -15
+
 
 class PlayerInputComponent(InputComponent):
     def __init__(self):
-        self.acceleration = 300
+        self.acceleration = ACCELERATION
 
     def update(self, player: Player, key: int, up: bool):
         if key == pygame.K_LSHIFT and not up:
-            self.acceleration = 300 if self.acceleration == 20 else 20
+            self.acceleration = ACCELERATION if self.acceleration == WALK_ACCELERATION else WALK_ACCELERATION
         if not up and not player.is_jumping and key in JUMP_KEYS:
             player.is_jumping = True
-            player.velocity.y = -15
+            player.velocity.y = JUMP_VELOCITY
         elif key in CONTROLS[Direction.LEFT]:
             self._move(player, Direction.LEFT, up)
         elif key in CONTROLS[Direction.RIGHT]:
