@@ -14,8 +14,6 @@ class Button:
         self._text_rect: pygame.Rect = self._text_surface.get_rect(center=self.rect.center)
 
     def draw(self, surface: pygame.Surface):
-        # self._surface.blit(self._text_surface, self._surface.get_rect())
-
         surface.blit(self._surface, self.rect)
         surface.blit(self._text_surface, self._text_rect)
 
@@ -37,7 +35,7 @@ class Button:
             return True
 
 
-def create_label(text, font, size, fg: str='black', bg: str=None):
+def create_label(text, font, size, fg: str = 'black', bg: str = None):
     font = pygame.font.SysFont(font, size)
     font_surface: pygame.Surface = font.render(text, False, pygame.Color(fg), pygame.Color(bg) if bg else bg)
     return font_surface
