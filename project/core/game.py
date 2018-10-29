@@ -1,13 +1,9 @@
 import pygame
 
-from project.utils import Dimensions
+from project.menu import MainMenu
+from .constants import DEFAULT_SIZE, FPS, JUICE_FILL_RATE, MAP_PATH, TITLE
 from .renderer import Renderer
 from .world import World
-
-DEFAULT_SIZE = Dimensions(1280, 720)
-FPS = 60
-MAP_PATH = 'assets/map.tmx'
-JUICE_FILL_RATE = 5
 
 
 class Game:
@@ -15,7 +11,7 @@ class Game:
         self.running = False
         self.debug = True
 
-        self.renderer = Renderer(DEFAULT_SIZE)
+        self.renderer = Renderer(DEFAULT_SIZE.width, DEFAULT_SIZE.height)
         self.world = World(MAP_PATH)
         self.renderer.load_world(self.world)
 
@@ -43,7 +39,10 @@ class Game:
                 event.lemon.kill()
             elif event.type == pygame.USEREVENT + 2:
                 # TODO: Handle death
-                print('player died')
+                # print('player died')
+                self.world = World(MAP_PATH)
+                self.renderer.load_world(self.world)
+                self.score = 0
 
         return key_events, col_event
 
@@ -61,8 +60,16 @@ class Game:
 
     def run(self):
         """Starts the game's main loop."""
+        pygame.display.set_caption(TITLE)
+
+        main_menu = MainMenu(DEFAULT_SIZE.width, DEFAULT_SIZE.height)
+        if not main_menu.mainloop():
+            return pygame.quit()
+
         self.running = True
         clock = pygame.time.Clock()
+
+        pygame.mouse.set_visible(False)
 
         try:
             while self.running:

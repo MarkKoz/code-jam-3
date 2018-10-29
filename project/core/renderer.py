@@ -2,22 +2,24 @@ import pygame
 import pyscroll
 
 from project.entities.player import Player
-from project.utils import Dimensions
+from .constants import SCREEN_SCALE
 from .world import World
 
 
 class Renderer:
-    def __init__(self, resolution: Dimensions):
+    def __init__(self, width: int, height: int):
         self.screen: pygame.Surface = None
         self.surface: pygame.Surface = None
-        self._set_screen(*resolution)
+        self._set_screen(width, height)
 
         self.map_layer = None
         self.group = None
 
     def load_world(self, world: World):
         w, h = self.screen.get_size()
-        self.map_layer = pyscroll.BufferedRenderer(world.map_data, (w / 2, h / 2), clamp_camera=True)
+        self.map_layer = pyscroll.BufferedRenderer(world.map_data,
+                                                   (w / SCREEN_SCALE, h / SCREEN_SCALE),
+                                                   clamp_camera=True)
         self.group = pyscroll.PyscrollGroup(map_layer=self.map_layer, default_layer=4)
         self.group.add(world.player)
         self.group.add(world.lemons)
@@ -40,7 +42,7 @@ class Renderer:
 
     def resize(self, width, height):
         self._set_screen(width, height)
-        self.map_layer.set_size((width / 2, height / 2))
+        self.map_layer.set_size((width / SCREEN_SCALE, height / SCREEN_SCALE))
 
     def _draw_debug_info(self, player: Player, col_event):
         # TODO: Move somewhere else?
@@ -72,4 +74,4 @@ class Renderer:
     def _set_screen(self, width, height):
         """Simple wrapper to keep the screen resizeable."""
         self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-        self.surface = pygame.Surface((width / 2, height / 2)).convert()
+        self.surface = pygame.Surface((width / SCREEN_SCALE, height / SCREEN_SCALE)).convert()
