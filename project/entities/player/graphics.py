@@ -1,7 +1,10 @@
 from collections import deque
 
+import pygame
+
 from project.components import GraphicsComponent
 from project.core.game import FPS
+from project.utils import Direction
 from .player_entity import Player
 
 
@@ -24,8 +27,13 @@ class PlayerGraphicsComponent(GraphicsComponent):
             if self.frame % (FPS // len(self.run)) == 0:  # Evenly spread each animation frame over 1 second
                 self.run.rotate(-1)
         elif player.velocity.x == 0:
+            # TODO: Idle when colliding left or right
             player.image = self.idle[0]
             if self.frame % (FPS // len(self.idle)) == 0:
                 self.idle.rotate(-1)
+
+        # TODO: Not very efficient. Use events or store pre-flipped Surfaces?
+        if player.orientation == Direction.LEFT:
+            player.image = pygame.transform.flip(player.image, True, False)
 
         self.frame = (self.frame + 1) % FPS  # Increment frame count; roll over to 1 when frame == FPS
