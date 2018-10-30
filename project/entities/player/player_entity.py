@@ -1,5 +1,3 @@
-import pygame
-
 from project.components import GraphicsComponent, InputComponent, PhysicsComponent
 from project.entities import Entity
 from project.utils import Direction
@@ -15,8 +13,6 @@ class Player(Entity):
         self._graphics = graphics
         self._input = inp
         self._physics = physics
-
-        self.image.fill(pygame.Color('yellow'))  # TODO: For testing purposes
 
     @property
     def orientation(self) -> Direction:
