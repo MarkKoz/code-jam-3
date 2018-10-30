@@ -14,8 +14,8 @@ class MainMenu:
         self._title_label = create_label(TITLE, 'Arial', 24)
         self._title_rect: pygame.Rect = self._title_label.get_rect()
         self._buttons = []
-        self._buttons.append(Button(200, 40, 'green', text='Start', command=self._start))
-        self._buttons.append(Button(200, 40, 'green', text='Quit', command=self._exit))
+        self._buttons.append(Button(200, 40, 'green', text='Start', command=self._start, shortcut=pygame.K_SPACE))
+        self._buttons.append(Button(200, 40, 'green', text='Quit', command=self._exit, shortcut=pygame.K_ESCAPE))
 
         self._set_screen(width, height)
 
@@ -42,7 +42,7 @@ class MainMenu:
                 self.exit = True
             elif event.type == pygame.VIDEORESIZE:
                 self.resize(event.w, event.h)
-            elif event.type in (pygame.MOUSEMOTION, pygame.MOUSEBUTTONUP):
+            elif event.type in (pygame.MOUSEMOTION, pygame.MOUSEBUTTONUP, pygame.KEYUP):
                 for button in self._buttons:
                     button.handle_event(event)
             # TODO: Direction key menu navigation

@@ -4,8 +4,9 @@ from project.core.constants import SCREEN_SCALE
 
 
 class Button:
-    def __init__(self, width: int, height: int, colour: str, text: str = '', command=None):
+    def __init__(self, width: int, height: int, colour: str, text: str = '', command=None, shortcut=None):
         self.command = command
+        self.shortcut = shortcut
         self._surface = pygame.Surface((width, height))
         self._surface.fill(pygame.Color(colour))
         self.rect: pygame.Rect = self._surface.get_rect()
@@ -21,7 +22,11 @@ class Button:
         self._text_rect.center = self.rect.center
 
     def handle_event(self, event):
-        if event.type == pygame.MOUSEMOTION:
+        if event.type == pygame.KEYUP and event.key == self.shortcut:
+            if self.command:
+                self.command()
+
+        elif event.type == pygame.MOUSEMOTION:
             x, y = event.pos
             if self.rect.collidepoint((x / SCREEN_SCALE, y / SCREEN_SCALE)):
                 # TODO: Hover effect
