@@ -29,4 +29,4 @@ class Player(Entity):
             self._input.update(self, key, up)
 
         self._physics.update(self, time_delta, world)
-        self._graphics.update()
+        self._graphics.update(self)
