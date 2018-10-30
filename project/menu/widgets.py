@@ -11,7 +11,7 @@ class Button:
         self._surface.fill(pygame.Color(colour))
         self.rect: pygame.Rect = self._surface.get_rect()
 
-        self._text_surface = create_label(text, 'Arial', 22)
+        self._text_surface = create_label(text, 'Times', 22)
         self._text_rect: pygame.Rect = self._text_surface.get_rect(center=self.rect.center)
 
     def draw(self, surface: pygame.Surface):
@@ -44,3 +44,31 @@ def create_label(text, font, size, fg: str = 'black', bg: str = None):
     font = pygame.font.SysFont(font, size)
     font_surface: pygame.Surface = font.render(text, False, pygame.Color(fg), pygame.Color(bg) if bg else bg)
     return font_surface
+
+
+def create_multiline_label(text: str, font: str, size: int, fg: str = 'black', bg: str = None):
+    fg = pygame.Color(fg)
+    font = pygame.font.SysFont(font, size)
+    surfaces = []
+    heights = []
+    width = 0
+    height = 0
+
+    for line in text.split('\n'):
+        font_surface: pygame.Surface = font.render(line, False, fg)
+        surfaces.append(font_surface)
+        surface_width, surface_height = font_surface.get_size()
+        heights.append(height)
+        height += surface_height
+        if surface_width > width:
+            width = surface_width
+
+    surface = pygame.Surface((width, height), pygame.SRCALPHA)
+    if bg:
+        surface.fill(pygame.Color(bg))
+    else:
+        surface = surface.convert_alpha()
+
+    for font_surface, height_offset in zip(surfaces, heights):
+        surface.blit(font_surface, (width / 2 - font_surface.get_width() / 2, height_offset))
+    return surface

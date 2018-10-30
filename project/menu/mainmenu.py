@@ -1,7 +1,7 @@
 import pygame
 
-from project.core.constants import SCREEN_SCALE, TITLE
-from .widgets import Button, create_label
+from project.core import CONTROLS_HELP_TEXT, SCREEN_SCALE, TITLE
+from .widgets import Button, create_label, create_multiline_label
 
 
 class MainMenu:
@@ -11,11 +11,14 @@ class MainMenu:
         self.running = False
         self.exit = False
 
-        self._title_label = create_label(TITLE, 'Arial', 24)
+        self._title_label = create_label(TITLE, 'Times', 24)
         self._title_rect: pygame.Rect = self._title_label.get_rect()
         self._buttons = []
         self._buttons.append(Button(200, 40, 'green', text='Start', command=self._start, shortcut=pygame.K_SPACE))
         self._buttons.append(Button(200, 40, 'green', text='Quit', command=self._exit, shortcut=pygame.K_ESCAPE))
+
+        self._controls_info = create_multiline_label(CONTROLS_HELP_TEXT, 'Times', 18)
+        self._controls_info_rect: pygame.Rect = self._controls_info.get_rect()
 
         self._set_screen(width, height)
 
@@ -29,12 +32,14 @@ class MainMenu:
         x = self.surface.get_rect().centerx
 
         self._title_rect.centerx = x
+        self._controls_info_rect.centerx = x
         height = self._title_rect.height + 50
         for button in self._buttons:
             button.rect.centerx = x
             button.rect.top = height
             button.refresh()
             height += button.rect.height + 20
+        self._controls_info_rect.top = height
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -57,6 +62,7 @@ class MainMenu:
         self.surface.blit(self._title_label, self._title_rect)
         for button in self._buttons:
             button.draw(self.surface)
+        self.surface.blit(self._controls_info, self._controls_info_rect)
 
     def update(self):
         self.draw()
