@@ -64,6 +64,9 @@ class Game:
     def run(self):
         """Starts the game's main loop."""
         pygame.display.set_caption(TITLE)
+        icon = pygame.image.load('assets/textures/icon.png').convert_alpha()
+        icon.set_colorkey(pygame.Color('white'))
+        pygame.display.set_icon(icon)
 
         main_menu = MainMenu(DEFAULT_SIZE.width, DEFAULT_SIZE.height)
         if not main_menu.mainloop():
