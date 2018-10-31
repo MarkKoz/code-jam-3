@@ -27,7 +27,7 @@ class ButtonText(pygame.sprite.Sprite):
         self.rect: pygame.Rect = self.image.get_rect()
 
     def get_text(self) -> pygame.Surface:
-        text_surface = create_label(self.text, 'monogram', 32)
+        text_surface = create_label(self.text, 'monogram', 32, 'black')
         size = Dimensions(*text_surface.get_size())
         pos = Point(0, 0)
         if size < self.min_size:
@@ -114,7 +114,7 @@ class Button:
             return True
 
 
-def create_label(text, font_name, size, fg: str = 'black', bg: str = None):
+def create_label(text, font_name, size, fg: str = 'white', bg: str = None):
     if font_name in FONTS:
         font = pygame.font.Font(FONTS[font_name], size)
     else:
@@ -124,7 +124,7 @@ def create_label(text, font_name, size, fg: str = 'black', bg: str = None):
     return font_surface
 
 
-def create_multiline_label(text: str, font_name: str, size: int, fg: str = 'black', bg: str = None):
+def create_multiline_label(text: str, font_name: str, size: int, fg: str = 'white', bg: str = None):
     if font_name in FONTS:
         font = pygame.font.Font(FONTS[font_name], size)
     else:

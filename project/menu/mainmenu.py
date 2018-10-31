@@ -18,7 +18,7 @@ class MainMenu:
         self._buttons.append(Button('Start', Dimensions(96, 32), command=self._start, shortcut=pygame.K_SPACE))
         self._buttons.append(Button('Quit', Dimensions(96, 32), command=self._exit, shortcut=pygame.K_ESCAPE))
 
-        self._controls_info = create_multiline_label(CONTROLS_HELP_TEXT, 'Arial', 16)
+        self._controls_info = create_multiline_label(CONTROLS_HELP_TEXT, 'Arial', 18)
         self._controls_info_rect: pygame.Rect = self._controls_info.get_rect()
 
         self._set_screen(width, height)
@@ -26,7 +26,7 @@ class MainMenu:
     def _set_screen(self, width, height):
         self.screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
         self.surface = pygame.Surface((width / SCREEN_SCALE, height / SCREEN_SCALE)).convert()
-        self.surface.fill(pygame.Color('white'))
+        self.surface.fill(pygame.Color(70, 45, 67))
 
     def resize(self, width, height):
         self._set_screen(width, height)
@@ -35,7 +35,7 @@ class MainMenu:
         self._title_rect.centerx = x
         self._title_rect.top = 20
         self._controls_info_rect.centerx = x
-        height = self._title_rect.bottom + 50
+        height = self._title_rect.bottom + 20
         for button in self._buttons:
             button.rect.centerx = x
             button.rect.top = height
