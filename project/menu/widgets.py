@@ -11,7 +11,7 @@ class Button:
         self._surface.fill(pygame.Color(colour))
         self.rect: pygame.Rect = self._surface.get_rect()
 
-        self._text_surface = create_label(text, 'Times', 22)
+        self._text_surface = create_label(text, 'monogram', 32)
         self._text_rect: pygame.Rect = self._text_surface.get_rect(center=self.rect.center)
 
     def draw(self, surface: pygame.Surface):

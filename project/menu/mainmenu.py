@@ -11,13 +11,13 @@ class MainMenu:
         self.running = False
         self.exit = False
 
-        self._title_label = create_label(TITLE, 'Times', 24)
+        self._title_label = create_label(TITLE, 'too much ink', 32)
         self._title_rect: pygame.Rect = self._title_label.get_rect()
         self._buttons = []
         self._buttons.append(Button(200, 40, 'green', text='Start', command=self._start, shortcut=pygame.K_SPACE))
         self._buttons.append(Button(200, 40, 'green', text='Quit', command=self._exit, shortcut=pygame.K_ESCAPE))
 
-        self._controls_info = create_multiline_label(CONTROLS_HELP_TEXT, 'Times', 18)
+        self._controls_info = create_multiline_label(CONTROLS_HELP_TEXT, 'Arial', 16)
         self._controls_info_rect: pygame.Rect = self._controls_info.get_rect()
 
         self._set_screen(width, height)
@@ -32,8 +32,9 @@ class MainMenu:
         x = self.surface.get_rect().centerx
 
         self._title_rect.centerx = x
+        self._title_rect.top = 20
         self._controls_info_rect.centerx = x
-        height = self._title_rect.height + 50
+        height = self._title_rect.bottom + 50
         for button in self._buttons:
             button.rect.centerx = x
             button.rect.top = height
