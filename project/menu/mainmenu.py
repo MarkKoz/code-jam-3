@@ -1,6 +1,7 @@
 import pygame
 
 from project.core import CONTROLS_HELP_TEXT, SCREEN_SCALE, TITLE
+from project.utils import Dimensions
 from .widgets import Button, create_label, create_multiline_label
 
 
@@ -14,8 +15,8 @@ class MainMenu:
         self._title_label = create_label(TITLE, 'too much ink', 32)
         self._title_rect: pygame.Rect = self._title_label.get_rect()
         self._buttons = []
-        self._buttons.append(Button(200, 40, 'green', text='Start', command=self._start, shortcut=pygame.K_SPACE))
-        self._buttons.append(Button(200, 40, 'green', text='Quit', command=self._exit, shortcut=pygame.K_ESCAPE))
+        self._buttons.append(Button('Start', Dimensions(96, 32), command=self._start, shortcut=pygame.K_SPACE))
+        self._buttons.append(Button('Quit', Dimensions(96, 32), command=self._exit, shortcut=pygame.K_ESCAPE))
 
         self._controls_info = create_multiline_label(CONTROLS_HELP_TEXT, 'Arial', 16)
         self._controls_info_rect: pygame.Rect = self._controls_info.get_rect()
@@ -38,7 +39,6 @@ class MainMenu:
         for button in self._buttons:
             button.rect.centerx = x
             button.rect.top = height
-            button.refresh()
             height += button.rect.height + 20
         self._controls_info_rect.top = height
 
