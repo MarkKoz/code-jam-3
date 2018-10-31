@@ -38,9 +38,7 @@ class Game:
                 self.world.juice.size.height = self.score * JUICE_FILL_RATE
                 event.lemon.kill()
             elif event.type == pygame.USEREVENT + 2:
-                self.world = World(MAP_PATH)
-                self.renderer.load_world(self.world)
-                self.score = 0
+                self.reset()
 
         return key_events, col_event
 
