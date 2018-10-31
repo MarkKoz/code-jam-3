@@ -57,7 +57,7 @@ class World:
     @staticmethod
     def _get_player(tmx_data: pytmx.TiledMap):
         player: pytmx.TiledObject = tmx_data.get_object_by_name('player')
-        size = Dimensions(16, 32)
+        size = Dimensions(27, 35)
         return Player(
             PlayerGraphicsComponent(),
             PlayerInputComponent(),
