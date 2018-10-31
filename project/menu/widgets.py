@@ -7,7 +7,7 @@ SCALE = 2
 
 
 class ButtonBorder(pygame.sprite.Sprite):
-    def __init__(self, image_path: str, flip_x: bool=False, flip_y: bool=False, *groups):
+    def __init__(self, image_path: str, flip_x: bool = False, flip_y: bool = False, *groups):
         super().__init__(groups)
 
         self.image: pygame.Surface = pygame.image.load(image_path)
