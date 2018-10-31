@@ -9,7 +9,7 @@ from .world import World
 class Game:
     def __init__(self):
         self.running = False
-        self.debug = True
+        self.debug = False
 
         self.renderer = Renderer(DEFAULT_SIZE.width, DEFAULT_SIZE.height)
         self.world = World(MAP_PATH)
