@@ -22,6 +22,8 @@ class PlayerPhysicsComponent(PhysicsComponent):
 
         if player.is_jumping:
             player.velocity.y -= world.gravity * time_delta
+            if player.velocity.y > 10:
+                player.velocity.y = 10
 
         player.position.y += player.velocity.y
         player.rect.topleft = player.position
