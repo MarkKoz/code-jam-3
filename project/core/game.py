@@ -38,7 +38,12 @@ class Game:
                 self.world.juice.size.height = self.score * JUICE_FILL_RATE
                 event.lemon.kill()
             elif event.type == pygame.USEREVENT + 2:
+                self.renderer.death_menu.display = True
+                pygame.mouse.set_visible(True)
+            elif event.type == pygame.USEREVENT + 3:
                 self.reset()
+
+            self.renderer.death_menu.handle_events(event)
 
         return key_events, col_event
 
@@ -52,6 +57,7 @@ class Game:
 
     def update(self, time_delta, key_events):
         self.renderer.group.update(time_delta, key_events, self.world)
+        # TODO: Stop player from falling while in death menu
 
         for e in key_events:
             self.handle_input(*e)

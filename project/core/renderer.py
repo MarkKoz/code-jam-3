@@ -2,6 +2,7 @@ import pygame
 import pyscroll
 
 from project.entities.player import Player
+from project.menu import DeathMenu
 from .constants import FONTS, SCREEN_SCALE
 from .world import World
 
@@ -14,6 +15,8 @@ class Renderer:
 
         self.map_layer = None
         self.group = None
+
+        self.death_menu = DeathMenu(*self.surface.get_size())
 
     def load_world(self, world: World):
         w, h = self.screen.get_size()
@@ -43,6 +46,8 @@ class Renderer:
     def resize(self, width, height):
         self._set_screen(width, height)
         self.map_layer.set_size((width / SCREEN_SCALE, height / SCREEN_SCALE))
+        if self.death_menu.display:
+            self.death_menu.resize(*self.surface.get_size())
 
     def _draw_debug_info(self, player: Player, col_event):
         # TODO: Move somewhere else?
@@ -66,7 +71,11 @@ class Renderer:
 
     def update(self, player: Player, score: int, debug: bool, col_event):
         self.draw(player)
-        self.draw_score(score)
+
+        self.death_menu.update(score, self.surface)
+        if not self.death_menu.display:
+            self.draw_score(score)
+
         if debug:
             self._draw_debug_info(player, col_event)
 
