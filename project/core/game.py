@@ -47,7 +47,7 @@ class Game:
     def handle_input(self, key, up=False):
         if key == pygame.K_i and not up:
             self.debug = not self.debug
-        elif key == pygame.K_g and not up:
+        elif key == pygame.K_g and not up and self.debug:
             self.world.gravity = 0 if self.world.gravity else -50
         elif key == pygame.K_r and not up:
             self.reset()
