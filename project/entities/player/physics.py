@@ -90,7 +90,7 @@ class PlayerPhysicsComponent(PhysicsComponent):
 
             # Skip if player is more than 1 unit above the slope.
             # This prevents snapping to the bottom while jumping over the slope.
-            if player.rect.bottom <= y - 1:
+            if player.is_jumping and player.rect.bottom <= y - 1:
                 continue
 
             # Prevents weird behaviour when at the end of the slope.
