@@ -57,8 +57,11 @@ class Renderer:
         font = pygame.font.Font(FONTS['monogram'], 16)
         height = 0
         for line in text:
-            font_surface: pygame.Surface = font.render(line, False, (255, 255, 255), (0, 0, 0))
-            self.surface.blit(font_surface, (0, height))
+            font_surface: pygame.Surface = font.render(line, False, pygame.Color('white'))
+            bg_surface: pygame.Surface = pygame.Surface(font_surface.get_size(), pygame.SRCALPHA, 32)
+            bg_surface.fill((51, 51, 51, 159))
+            bg_surface.blit(font_surface, (0, 0))
+            self.surface.blit(bg_surface, (0, height))
             height += font_surface.get_height()
 
     def update(self, player: Player, score: int, debug: bool, col_event):
