@@ -16,6 +16,10 @@ class PlayerPhysicsComponent(PhysicsComponent):
         # Prevents movement further left than the screen.
         player.position.x = max(player.groups()[0].view[0], player.position.x)
 
+        # Prevents leaving the map on the right side.
+        right = world.map_data.map_size[0] * world.map_data.tile_size[0]
+        player.position.x = min(player.position.x + player.size.width, right) - player.size.width
+
         if player.is_jumping:
             player.velocity.y -= world.gravity * time_delta
 
