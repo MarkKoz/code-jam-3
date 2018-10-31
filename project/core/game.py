@@ -49,12 +49,19 @@ class Game:
             self.debug = not self.debug
         elif key == pygame.K_g and not up:
             self.world.gravity = 0 if self.world.gravity else -50
+        elif key == pygame.K_r and not up:
+            self.reset()
 
     def update(self, time_delta, key_events):
         self.renderer.group.update(time_delta, key_events, self.world)
 
         for e in key_events:
             self.handle_input(*e)
+
+    def reset(self):
+        self.world.reset()
+        self.renderer.load_world(self.world)
+        self.score = 0
 
     def run(self):
         """Starts the game's main loop."""
