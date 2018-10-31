@@ -1,6 +1,6 @@
 import pygame
 
-from project.core.constants import SCREEN_SCALE
+from project.core.constants import FONTS, SCREEN_SCALE
 
 
 class Button:
@@ -40,15 +40,23 @@ class Button:
             return True
 
 
-def create_label(text, font, size, fg: str = 'black', bg: str = None):
-    font = pygame.font.SysFont(font, size)
+def create_label(text, font_name, size, fg: str = 'black', bg: str = None):
+    if font_name in FONTS:
+        font = pygame.font.Font(FONTS[font_name], size)
+    else:
+        font = pygame.font.SysFont(font_name, size)
+
     font_surface: pygame.Surface = font.render(text, False, pygame.Color(fg), pygame.Color(bg) if bg else bg)
     return font_surface
 
 
-def create_multiline_label(text: str, font: str, size: int, fg: str = 'black', bg: str = None):
+def create_multiline_label(text: str, font_name: str, size: int, fg: str = 'black', bg: str = None):
+    if font_name in FONTS:
+        font = pygame.font.Font(FONTS[font_name], size)
+    else:
+        font = pygame.font.SysFont(font_name, size)
+
     fg = pygame.Color(fg)
-    font = pygame.font.SysFont(font, size)
     surfaces = []
     heights = []
     width = 0
