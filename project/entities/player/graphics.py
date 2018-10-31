@@ -20,8 +20,7 @@ class PlayerGraphicsComponent(GraphicsComponent):
 
     def update(self, player: Player):
         if player.is_jumping:
-            # TODO: Use jumping textures
-            pass
+            player.image = self.jump[2]
         elif player.velocity.x != 0:
             player.image = self.run[0]
             if self.frame % (FPS // len(self.run)) == 0:  # Evenly spread each animation frame over 1 second
