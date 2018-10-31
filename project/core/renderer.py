@@ -2,7 +2,7 @@ import pygame
 import pyscroll
 
 from project.entities.player import Player
-from .constants import SCREEN_SCALE
+from .constants import FONTS, SCREEN_SCALE
 from .world import World
 
 
@@ -34,11 +34,11 @@ class Renderer:
         self.group.draw(self.surface)
 
     def draw_score(self, score):
-        text = f'Score: {score}'
-        font = pygame.font.SysFont('Arial', 14)
-        font_surface: pygame.Surface = font.render(text, False, (255, 255, 255), (0, 0, 0))
+        text = f'Lemons: {score}'
+        font = pygame.font.Font(FONTS['monogram'], 16)
+        font_surface: pygame.Surface = font.render(text, False, pygame.Color('white'))
         x = self.surface.get_size()[0] - font_surface.get_width()
-        self.surface.blit(font_surface, (x, 0))
+        self.surface.blit(font_surface, (x - 4, 4))
 
     def resize(self, width, height):
         self._set_screen(width, height)
@@ -54,7 +54,7 @@ class Renderer:
                 f'Surface: {col_event.surface}'
             ))
 
-        font = pygame.font.SysFont('Arial', 14)
+        font = pygame.font.Font(FONTS['monogram'], 16)
         height = 0
         for line in text:
             font_surface: pygame.Surface = font.render(line, False, (255, 255, 255), (0, 0, 0))
